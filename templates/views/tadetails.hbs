@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<style>
+body {
+    font-family: "Montserrat", sans-serif;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 0 19px;
+    background-color: #f7f8fa;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 100%;
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+div.container {
+  border-radius: 5px;
+  background-color: #f7f8fa;
+  {{!-- padding: 20px; --}}
+}
+</style>
+<head>
+    <title>TA Preference</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+    <link rel = "stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>TA Preferences</h1>
+
+<div class="container">
+  <form action="/">
+    <label for="rollNumber">TA Roll Number</label>
+    <span class="required">*</span>
+    <input type="text" id="rollNumber" name="rollNumber" placeholder="Enter your rollnumber.." required>
+    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+
+    <label for="pref1">Preference 1</label>
+    <span class="required">*</span>
+    <input type="text" id="pref1" name="pref1" placeholder="Enter course code.." required>
+    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+
+    <label for="pref2">Preference 2</label>
+    <span class="required">*</span>
+    <input type="text" id="pref2" name="pref2" placeholder="Enter course code.." required>
+    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+
+
+    <label for="pref3">Preference 3</label>
+    <span class="required">*</span>
+    <input type="text" id="pref3" name="pref3" placeholder="Enter course code.." required>
+
+    <label for="password">Password</label>
+    <span class="required">*</span>
+    <input type="text" id="password" name="password" placeholder="Enter your password.." required>
+
+    {{!-- <label for="expert1">expert1</label>
+    <input type="text" id="expert1" name="expert1" placeholder="Enter course code of your expertise" required>
+
+    <label for="expert2">expert2</label>
+    <input type="text" id="expert2" name="expert2" placeholder="Enter course code of your expertise" required>
+
+    <label for="expert3">expert3</label>
+    <input type="text" id="expert3" name="expert3" placeholder="Enter course code of your expertise" required> --}}
+    <input type="submit" value="Submit">
+  </form>
+  <p><b>Note</b>: If you are an expert in any of the Preference, fill the checkbox</p>
+</div>
+{{>footer}}
+<script src="/js/ta.js"></script>
+</body>
+</html>
