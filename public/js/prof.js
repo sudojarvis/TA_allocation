@@ -50,6 +50,7 @@ facultyForm.addEventListener("submit", function (e) {
     e.preventDefault();
     var coursCode = document.querySelector("#coursecode").value;
     var ugPg = document.querySelector("#ugpg").value;
+    var cgpa = document.querySelector("#cgpa").value;
     var electiveCore = document.querySelector("#elective").value;
     var needToAttend = document.querySelector("#needto").value;
     var nof = document.querySelector("#nof").value;
@@ -58,6 +59,7 @@ facultyForm.addEventListener("submit", function (e) {
     var taRollNumber2 = document.querySelector("#prefta2").value;
     var taRollNumber3 = document.querySelector("#prefta3").value;
     var password = document.querySelector('#password').value;
+    
     var data = {
         "id": coursCode,
         "password": password
@@ -81,6 +83,8 @@ facultyForm.addEventListener("submit", function (e) {
                     var data = {
                         "courseCode": coursCode,
                         "ugPg": ugPg,
+                        //added on 19 sept.
+                        "cgpa": cgpa,
                         "electiveCore": electiveCore,
                         "needToAttend": needToAttend,
                         "nof": nof,
