@@ -1,8 +1,6 @@
 
+// global.document = new JSDOM(html).window.document; - Hk
 var facultyForm = document.querySelector("form");
-
-
-
 // facultyForm.addEventListener("submit", function () {
 //     var coursCode = document.querySelector("#coursecode").value;
 //     var ugPg = document.querySelector("#ugpg").value;
