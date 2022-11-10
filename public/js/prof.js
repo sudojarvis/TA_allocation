@@ -12,7 +12,6 @@ var facultyForm = document.querySelector("form");
 //     var taRollNumber2 = document.querySelector("#prefta2").value;
 //     var taRollNumber3 = document.querySelector("#prefta3").value;
 
-
 //     var data = {
 //         "courseCode": coursCode,
 //         "ugPg": ugPg,
@@ -57,7 +56,6 @@ facultyForm.addEventListener("submit", function (e) {
     var taRollNumber2 = document.querySelector("#prefta2").value;
     var taRollNumber3 = document.querySelector("#prefta3").value;
     var password = document.querySelector('#password').value;
-    
     var data = {
         "id": coursCode,
         "password": password
