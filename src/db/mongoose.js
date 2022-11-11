@@ -1,10 +1,19 @@
 //ALREADY EXISTED
 
+// const mongoose = require('mongoose');
+
+// const connectionUrl = process.env.MONGODB_URL;
+
+
+// mongoose.connect(connectionUrl, {
+//     useNewUrlParser : true
+// });
 const mongoose = require('mongoose');
 
-const connectionUrl = process.env.MONGODB_URL;
+// const connectionUrl = 'mongodb://127.0.0.1:27017/TA-allocation';
+const connectionUrl = 'mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test';
 
-
+// const connectionURL
 mongoose.connect(connectionUrl, {
     useNewUrlParser : true
 });

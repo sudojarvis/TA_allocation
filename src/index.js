@@ -13,7 +13,8 @@ const ID_admin = require("./models/ID_admin");
 const auth = require('../src/middleware/auth');
 
 const app = express();
-const port = process.env.PORT;
+// const port = process.env.PORT;
+const port = 3000;
 
 const publicDirectoryPath = path.join(__dirname, "../public");
 const viewsPath = path.join(__dirname, "../templates/views");
