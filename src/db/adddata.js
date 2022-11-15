@@ -5,11 +5,23 @@ var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
-  var dbo = db.db("TA_alloc");
-  var myobj = { id: "B20CS016", password: "abcd" };
-  dbo.collection("id_ta").insertOne(myobj, function(err, res) {
+  var dbo = db.db("test");
+  var myobj = { id: "B20CS019", password: "xyz" };
+  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
     if (err) throw err;
     console.log("1 document inserted");
     db.close();
   });
 });
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { id: "admin", password: "admin" };
+  dbo.collection("id_admins").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
+
