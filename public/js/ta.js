@@ -47,8 +47,8 @@ facultyForm.addEventListener("submit", function (e) {
                             if (data.error) {
                                 messageLoc.textContent = data.error;
                             } else {
-                                console.log(data.coursCode);
-                                console.log(data.ugpg);
+                                console.log(data.rollNumber);
+                                console.log(data.pref1);
                             }
                         });
                     });

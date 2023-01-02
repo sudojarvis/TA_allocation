@@ -46,16 +46,16 @@ var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 //   });
 // });
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { id: "Amit", password: "amit" };
-//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { id: "csl1010", password: "harshi" };
+  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
 
 // MongoClient.connect(url, function(err, db) {

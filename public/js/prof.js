@@ -79,7 +79,6 @@ facultyForm.addEventListener("submit", function (e) {
                     var data = {
                         "courseCode": coursCode,
                         "ugPg": ugPg,
-                       
                         "electiveCore": electiveCore,
                         "needToAttend": needToAttend,
                         "nof": nof,
@@ -110,6 +109,6 @@ facultyForm.addEventListener("submit", function (e) {
         });
     });
 
-
+    
     facultyForm.reset();
 });
