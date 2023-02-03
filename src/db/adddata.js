@@ -13,303 +13,312 @@ var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 //   });
 // });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "B20CS001", password: "b20cs001" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "B20CS002", password: "b20cs002" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS001", password: "b20cs001" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS002", password: "b20cs002" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS003", password: "b20cs003" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS004", password: "b20cs004" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS005", password: "b20cs005" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS006", password: "b20cs006" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS007", password: "b20cs007" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS008", password: "b20cs008" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS009", password: "b20cs009" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "B20CS010", password: "b20cs010" };
+//   dbo.collection("id_tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL2010", password: "eel2010" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL2030", password: "eel2030" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL3070", password: "eel3070" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "SHL7430", password: "shl7430" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err; 
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL3080", password: "eel3080" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL2020", password : "eel2020" };  
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
   var dbo = db.db("test");
-  var myobj = { id: "B20CS003", password: "b20cs003" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "B20CS004", password: "b20cs004" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "B20CS005", password: "b20cs005" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "B20CS006", password: "b20cs006" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "B20CS007", password: "b20cs007" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "B20CS008", password: "b20cs008" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "B20CS009", password: "b20cs009" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "B20CS010", password: "b20cs010" };
-  dbo.collection("id_tas").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL2010", password: "eel2010" };
+  var myobj = { id: "CSL1010", password : "password" };  
   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
     if (err) throw err;
     console.log("1 document inserted");
     db.close();
   });
 });
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL2030", password: "eel2030" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL3100", password: "eel3100" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL3070", password: "eel3070" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL2050", password: "eel2050" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "SHL7430", password: "shl7430" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL3060", password: "eel3060" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err; 
-  var dbo = db.db("test");
-  var myobj = { id: "EEL3080", password: "eel3080" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL2040", password: "eel2040" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL2020", password : "eel2020" };  
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL3090", password: "eel3090" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL3100", password: "eel3100" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL7130", password: "eel7130" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL2050", password: "eel2050" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL7260", password: "eel7260" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL3060", password: "eel3060" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL7150", password: "eel7150" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL2040", password: "eel2040" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL3090", password: "eel3090" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL7130", password: "eel7130" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL7260", password: "eel7260" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL7150", password: "eel7150" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL7520", password: "eel7520" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL7520", password: "eel7520" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL7650", password: "eel7650" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL7650", password: "eel7650" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { id: "EEL7480", password: "eel7480" };
-  dbo.collection("id_profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { id: "EEL7480", password: "eel7480" };
+//   dbo.collection("id_profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 
 
 
@@ -452,7 +461,7 @@ MongoClient.connect(url, function(err, db) {
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
   var dbo = db.db("test");
-  var myobj = { courseCode: "7260", ugPg: "pg", electiveCore: "core", needToAttend: 0, nof: 7, theoryLab: "thory", taRollNumber1: "B20CS004", taRollNumber2: "B20CS009", taRollNumber3: "B20CS006" };
+  var myobj = { courseCode: "EEL7260", ugPg: "pg", electiveCore: "core", needToAttend: 0, nof: 7, theoryLab: "thory", taRollNumber1: "B20CS004", taRollNumber2: "B20CS009", taRollNumber3: "B20CS006" };
   dbo.collection("profs").insertOne(myobj, function(err, res) {
     if (err) throw err;
     console.log("1 document inserted");
@@ -502,108 +511,108 @@ MongoClient.connect(url, function(err, db) {
   });
 });
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1011", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "csl1011", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1012", ugPg: "pg", electiveCore: "ele2", needToAttend: 0, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "csl1012", ugPg: "pg", electiveCore: "ele2", needToAttend: 0, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
 
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1013", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "csl1013", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1014", ugPg: "ug", electiveCore: "elective", needToAttend: 0, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS067", taRollNumber2: "B20CS019", taRollNumber3: "B20CS016" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "csl1014", ugPg: "ug", electiveCore: "elective", needToAttend: 0, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS067", taRollNumber2: "B20CS019", taRollNumber3: "B20CS016" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1015", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
-
-
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1016", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1017", ugPg: "ug", electiveCore: "elective", needToAttend: 0, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS067", taRollNumber2: "B20CS019", taRollNumber3: "B20CS016" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
-
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1018", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "csl1015", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1019", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "csl1016", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "csl1017", ugPg: "ug", electiveCore: "elective", needToAttend: 0, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS067", taRollNumber2: "B20CS019", taRollNumber3: "B20CS016" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "csl1018", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
+
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "csl1019", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
   var dbo = db.db("test");
@@ -648,68 +657,68 @@ MongoClient.connect(url, function(err, db) {
   });
 });
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { rollNumber: "B20CS005", pref1: "csl1016", pref2: "csl1013", pref3: "csl1012" };
-//   dbo.collection("tas").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { rollNumber: "B20EE099", pref1: "csl1016", pref2: "csl1013", pref3: "csl1012" };
+  dbo.collection("tas").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { rollNumber: "B20CS006", pref1: "csl1014", pref2: "csl1015", pref3: "csl1011" };
-//   dbo.collection("tas").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { rollNumber: "B20CS006", pref1: "csl1014", pref2: "csl1015", pref3: "csl1011" };
+  dbo.collection("tas").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { rollNumber: "B20CS007", pref1: "csl1011", pref2: "csl1014", pref3: "csl1010" };
-//   dbo.collection("tas").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { rollNumber: "B20CS007", pref1: "csl1011", pref2: "csl1014", pref3: "csl1010" };
+  dbo.collection("tas").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { rollNumber: "B20CS008", pref1: "csl1013", pref2: "csl1012", pref3: "csl1017" };
-//   dbo.collection("tas").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { rollNumber: "B20CS008", pref1: "csl1013", pref2: "csl1012", pref3: "csl1017" };
+  dbo.collection("tas").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { rollNumber: "B20CS009", pref1: "csl1013", pref2: "csl1015", pref3: "csl1011" };
-//   dbo.collection("tas").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { rollNumber: "B20CS009", pref1: "csl1013", pref2: "csl1015", pref3: "csl1011" };
+  dbo.collection("tas").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { rollNumber: "B20CS019", pref1: "csl1020", pref2: "csl1021", pref3: "csl1022" };
-//   dbo.collection("tas").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { rollNumber: "B20CS019", pref1: "csl1020", pref2: "csl1021", pref3: "csl1022" };
+  dbo.collection("tas").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});
