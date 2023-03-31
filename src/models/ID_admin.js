@@ -17,5 +17,4 @@ const idSchema = mongoose.Schema({
 });
 
 const ID_admin = mongoose.model('ID_admin', idSchema)
- 
 module.exports = ID_admin
