@@ -1,2 +1,2 @@
-use ('Ta_alloc')
+use ('TA_alloc')
 db.ID_Ta.insert_one({'id': 'B20CS019', 'password': "abcd"})

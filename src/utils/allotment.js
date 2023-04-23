@@ -230,7 +230,17 @@ function allotment(prof, ta) {
     for (var i = 0; i < taarr.length; i++){
         match2[taarr[i]] = match[taarr[i]]
     }
-
+    match2 = JSON.stringify(match2);
+    match2 = '['+match2+']';
+    //convert match2 to json again
+    match2 = JSON.parse(match2);
+    //for loop on match2, convert value of each key to string
+    for (var i = 0; i < match2.length; i++){
+        for (var key in match2[i]){
+            match2[i][key] = match2[i][key].toString();
+        }
+    }
+    
     return match2;
     // return match;
 }

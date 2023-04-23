@@ -11,7 +11,7 @@ const ID_Ta = require("./models/ID_Ta");
 const ID_prof = require("./models/ID_prof");
 const ID_admin = require("./models/ID_admin");
 const auth = require('../src/middleware/auth');
-
+const XLSX = require('xlsx');
 const app = express();
 // const port = process.env.PORT;
 const port = 3000;
@@ -36,12 +36,9 @@ app.get("/admin", (req, res) => {
 	res.render("admin");
 });
 
-
 app.get("/addUser", (req, res) => {
 	res.render('addUser')
 });
-
-
 
 app.get("/ta", (req, res) => {
 	res.render("tadetails");
@@ -76,8 +73,6 @@ app.get("/profpage", (req, res) => {
 app.get("/dropdata", (req, res) => {
 	res.render("dropdata");
 });
-
-
 
 // API for tadetails
 app.post("/tadetails", async (req, res) => {
@@ -209,9 +204,50 @@ app.get("/showdata", async (req, res) => {
 		obj["pref3"] = ta[i].pref3;
 		tadetail.push(obj);
 	}
-
+	
 	res.send({ coursedetail, tadetail });
+	
 });
+
+
+//get the data from /showdata page to excel sheet
+// app.get("/download", async (req, res) => {
+// 	const prof = await PROF.find();
+// 	const ta = await TA.find();
+	
+
+// const convertJsonToExcel = (data, fileName) => {
+// 	const ws = XLSX.utils.json_to_sheet(data);
+// 	const wb = XLSX.utils.book_new();
+// 	XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+// 	XLSX.writeFile(wb, fileName);
+// };
+
+// app.get("/download", async (req, res) => {
+// 	const prof = await PROF.find();
+// 	const ta = await TA.find();
+
+// const XLSX = require('xlsx');
+// const workbook = XLSX.utils.book_new();
+// const worksheet = XLSX.utils.json_to_sheet(data);
+// XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+// XLSX.writeFile(workbook, 'data.xlsx');
+
+// MongoClient.connect(url, function(err, client) {
+// 	if (err) throw err;
+// 	const db = client.db('mydatabase');
+// 	const collection = db.collection('mycollection');
+// 	collection.find({}).toArray(function(err, data) {
+// 	  if (err) throw err;
+// 	  const XLSX = require('xlsx');
+// 	  const workbook = XLSX.utils.book_new();
+// 	  const worksheet = XLSX.utils.json_to_sheet(data);
+// 	  XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+// 	  XLSX.writeFile(workbook, 'data.xlsx');
+// 	  res.download('data.xlsx');
+// 	  client.close();
+// 	});
+//   });
 
 // app.get("/deletedata", async (req, res) => {
 // 	await PROF.remove({});
@@ -219,11 +255,31 @@ app.get("/showdata", async (req, res) => {
 // 	res.send("Dropped");
 // });
 
+// app.get("/result", async (req, res) => {
+// 	const prof = await PROF.find();
+// 	const ta = await TA.find();
+// 	// res.send(match)
+	
+// 	res.json(allotment(prof, ta));
+	
+// });
 app.get("/result", async (req, res) => {
 	const prof = await PROF.find();
 	const ta = await TA.find();
 	// res.send(match)
-	res.json(allotment(prof, ta));
+	result = allotment(prof, ta);
+	result2 = res.json(allotment(prof, ta));	
+	const sheet = XLSX.utils.json_to_sheet(result);
+	
+	const workbook = XLSX.utils.book_new();
+	XLSX.utils.book_append_sheet(workbook, sheet, "Allotment");
+	const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+	XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
+	XLSX.writeFile(workbook, 'allotment.xlsx')
+	// res.end('<p><a download="file.zip" href="/hostedFile.zip">Download</a></p>\n');
+
+	
 });
 
 app.get("/api", async (req, res) => {
