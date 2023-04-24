@@ -479,16 +479,16 @@ var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 //   });
 // });
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("test");
-  var myobj = { courseCode: "EEL1111", ugPg: "ug", electiveCore: "elective", needToAttend: 1, nof: 10, theoryLab: "thory", taRollNumber1: "B20CS007", taRollNumber2: "B20CS006", taRollNumber3: "B20CS004" };
-  dbo.collection("profs").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { courseCode: "EEL1000", ugPg: "ug", electiveCore: "elective", needToAttend: 1, nof: 10, theoryLab: "thory", taRollNumber1: "B20CS007", taRollNumber2: "B20CS006", taRollNumber3: "B20CS004" };
+//   dbo.collection("profs").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
 // MongoClient.connect(url, function(err, db) {
 //   if (err) throw err;
 //   var dbo = db.db("test");
@@ -715,8 +715,18 @@ MongoClient.connect(url, function(err, db) {
 // MongoClient.connect(url, function(err, db) {
 //   if (err) throw err;
 //   var dbo = db.db("test");
-//   var myobj = { rollNumber: "B20CS111", pref1: "csl1020", pref2: "csl1021", pref3: "csl1022" };
+//   var myobj = { rollNumber: "B20CS110", pref1: "csl1020", pref2: "csl1021", pref3: "csl1022" };
 //   dbo.collection("tas").insertOne(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("test");
+//   var myobj = { courseCode: "EEL1000", ugPg: "pg", electiveCore: "core", needToAttend: 0, nof: 35, theoryLab: "thory", taRollNumber1: "B20CS004", taRollNumber2: "B20CS003", taRollNumber3: "B20CS009" };
+//   dbo.collection("profs").insertOne(myobj, function(err, res) {
 //     if (err) throw err;
 //     console.log("1 document inserted");
 //     db.close();

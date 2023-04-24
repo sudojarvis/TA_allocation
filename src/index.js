@@ -210,59 +210,6 @@ app.get("/showdata", async (req, res) => {
 });
 
 
-//get the data from /showdata page to excel sheet
-// app.get("/download", async (req, res) => {
-// 	const prof = await PROF.find();
-// 	const ta = await TA.find();
-	
-
-// const convertJsonToExcel = (data, fileName) => {
-// 	const ws = XLSX.utils.json_to_sheet(data);
-// 	const wb = XLSX.utils.book_new();
-// 	XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-// 	XLSX.writeFile(wb, fileName);
-// };
-
-// app.get("/download", async (req, res) => {
-// 	const prof = await PROF.find();
-// 	const ta = await TA.find();
-
-// const XLSX = require('xlsx');
-// const workbook = XLSX.utils.book_new();
-// const worksheet = XLSX.utils.json_to_sheet(data);
-// XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
-// XLSX.writeFile(workbook, 'data.xlsx');
-
-// MongoClient.connect(url, function(err, client) {
-// 	if (err) throw err;
-// 	const db = client.db('mydatabase');
-// 	const collection = db.collection('mycollection');
-// 	collection.find({}).toArray(function(err, data) {
-// 	  if (err) throw err;
-// 	  const XLSX = require('xlsx');
-// 	  const workbook = XLSX.utils.book_new();
-// 	  const worksheet = XLSX.utils.json_to_sheet(data);
-// 	  XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
-// 	  XLSX.writeFile(workbook, 'data.xlsx');
-// 	  res.download('data.xlsx');
-// 	  client.close();
-// 	});
-//   });
-
-// app.get("/deletedata", async (req, res) => {
-// 	await PROF.remove({});
-// 	await TA.remove({});
-// 	res.send("Dropped");
-// });
-
-// app.get("/result", async (req, res) => {
-// 	const prof = await PROF.find();
-// 	const ta = await TA.find();
-// 	// res.send(match)
-	
-// 	res.json(allotment(prof, ta));
-	
-// });
 app.get("/result", async (req, res) => {
 	const prof = await PROF.find();
 	const ta = await TA.find();
@@ -281,6 +228,11 @@ app.get("/result", async (req, res) => {
 
 	
 });
+app.get("/download-file", (req, res) => {
+	res.download("./public/assets/allotment.xlsx"); // Set disposition and send it.
+  });
+
+// app.use('/downloads', express.static('downloads'));
 
 app.get("/api", async (req, res) => {
 	res.json({
