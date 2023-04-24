@@ -606,7 +606,7 @@ var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 // MongoClient.connect(url, function(err, db) {
 //   if (err) throw err;
 //   var dbo = db.db("test");
-//   var myobj = { courseCode: "csl1019", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
+//   var myobj = { courseCode: "csl1111", ugPg: "pg", electiveCore: "ele2", needToAttend: 1, nof: 2, theoryLab: "theory", taRollNumber1: "B20CS063", taRollNumber2: "B20CS020", taRollNumber3: "B20CS021" };
 //   dbo.collection("profs").insertOne(myobj, function(err, res) {
 //     if (err) throw err;
 //     console.log("1 document inserted");
@@ -689,7 +689,27 @@ var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 //     db.close();
 //   });
 // });
+// MongoClient.connect(url, function(err, db) {
+//     if (err) throw err;
+//     var dbo = db.db("test");
+//     var myobj = { rollNumber: "B20CS097", pref1: "csl1001", pref2: "csl1014", pref3: "csl1010" };
+//     dbo.collection("tas").insertOne(myobj, function(err, res) {
+//       if (err) throw err;
+//       console.log("1 document inserted");
+//       db.close();
+//     });
+//   });
 
+//   MongoClient.connect(url, function(err, db) {
+//     if (err) throw err;
+//     var dbo = db.db("test");
+//     var myobj = { rollNumber: "B20CS107", pref1: "csl1011", pref2: "csl1094", pref3: "eel1010" };
+//     dbo.collection("tas").insertOne(myobj, function(err, res) {
+//       if (err) throw err;
+//       console.log("1 document inserted");
+//       db.close();
+//     });
+//   });
 // MongoClient.connect(url, function(err, db) {
 //   if (err) throw err;
 //   var dbo = db.db("test");
@@ -704,7 +724,7 @@ var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 // MongoClient.connect(url, function(err, db) {
 //   if (err) throw err;
 //   var dbo = db.db("test");
-//   var myobj = { rollNumber: "B20CS009", pref1: "csl1013", pref2: "csl1015", pref3: "csl1011" };
+//   var myobj = { rollNumber: "B20CS029", pref1: "csl0013", pref2: "csl1005", pref3: "csl1018" };
 //   dbo.collection("tas").insertOne(myobj, function(err, res) {
 //     if (err) throw err;
 //     console.log("1 document inserted");
@@ -712,20 +732,24 @@ var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 //   });
 // });
 
+
+
 // MongoClient.connect(url, function(err, db) {
 //   if (err) throw err;
 //   var dbo = db.db("test");
-//   var myobj = { rollNumber: "B20CS110", pref1: "csl1020", pref2: "csl1021", pref3: "csl1022" };
+//   var myobj = { rollNumber: "B20CS111", pref1: "csl1020", pref2: "csl1021", pref3: "csl1022" };
 //   dbo.collection("tas").insertOne(myobj, function(err, res) {
 //     if (err) throw err;
 //     console.log("1 document inserted");
 //     db.close();
 //   });
 // });
+
+
 // MongoClient.connect(url, function(err, db) {
 //   if (err) throw err;
 //   var dbo = db.db("test");
-//   var myobj = { courseCode: "EEL1000", ugPg: "pg", electiveCore: "core", needToAttend: 0, nof: 35, theoryLab: "thory", taRollNumber1: "B20CS004", taRollNumber2: "B20CS003", taRollNumber3: "B20CS009" };
+//   var myobj = { courseCode: "EEL1111", ugPg: "pg", electiveCore: "core", needToAttend: 0, nof: 35, theoryLab: "thory", taRollNumber1: "B20CS004", taRollNumber2: "B20CS003", taRollNumber3: "B20CS009" };
 //   dbo.collection("profs").insertOne(myobj, function(err, res) {
 //     if (err) throw err;
 //     console.log("1 document inserted");

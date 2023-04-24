@@ -140,6 +140,7 @@ app.post("/checkpasswordta", async (req, res) => {
 		res.status(201).send(data);
 	} catch (e) {
 		res.status(500).send(e);
+		// res.status(201).send(data);
 	}
 });
 
@@ -155,6 +156,7 @@ app.post("/checkpasswordprof", async (req, res) => {
 		res.status(201).send(data);
 	} catch (e) {
 		res.status(500).send(e);
+		// res.status(201).send(data);
 	}
 });
 
@@ -229,7 +231,8 @@ app.get("/result", async (req, res) => {
 	
 });
 app.get("/download-file", (req, res) => {
-	res.download("./public/assets/allotment.xlsx"); // Set disposition and send it.
+	res.download("./public/assets/allotment.xlsx");
+	// res.download("allotment.xlsx");
   });
 
 // app.use('/downloads', express.static('downloads'));
