@@ -1,15 +1,14 @@
 
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+// const jsdom = require("jsdom");
+// const { JSDOM } = jsdom;
 
-const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-const document = dom.window.document;
+// const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+// const document = dom.window.document;
 
 var facultyForm = document.querySelector("form");
 
-facultyForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
+facultyForm.addEventListener("submit", function () {
+    
     var rollNumber = document.querySelector("#rollNumber").value;
     var pref1 = document.querySelector("#pref1").value;
     var pref2 = document.querySelector("#pref2").value;

@@ -1,5 +1,3 @@
-
-
 var facultyForm = document.querySelector("form");
 
 facultyForm.addEventListener("submit", function () {
