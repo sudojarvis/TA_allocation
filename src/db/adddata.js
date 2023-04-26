@@ -746,13 +746,13 @@ var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 // });
 
 
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("test");
-//   var myobj = { courseCode: "EEL1111", ugPg: "pg", electiveCore: "core", needToAttend: 0, nof: 35, theoryLab: "thory", taRollNumber1: "B20CS004", taRollNumber2: "B20CS003", taRollNumber3: "B20CS009" };
-//   dbo.collection("profs").insertOne(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("1 document inserted");
-//     db.close();
-//   });
-// });
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("test");
+  var myobj = { courseCode: "EEL1111", ugPg: "pg", electiveCore: "core", needToAttend: 0, nof: 35, theoryLab: "thory", taRollNumber1: "B20CS004", taRollNumber2: "B20CS003", taRollNumber3: "B20CS009" };
+  dbo.collection("profs").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    db.close();
+  });
+});

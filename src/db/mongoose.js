@@ -12,6 +12,7 @@ const mongoose = require('mongoose');
 
 // const connectionUrl = 'mongodb://127.0.0.1:27017/TA-allocation';
 const connectionUrl = 'mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test';
+// const connectionUrl = process.env.MONGODB_URL;
 
 // const connectionURL
 mongoose.connect(connectionUrl, {

@@ -1,6 +1,15 @@
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 
-// global.document = new JSDOM(html).window.document; - Hk
+const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+const document = dom.window.document;
+
+
 var facultyForm = document.querySelector("form");
+
+// var MongoClient = require('mongodb').MongoClient;
+// // var url = "mongodb://localhost:27017/";
+// var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 // facultyForm.addEventListener("submit", function () {
 //     var coursCode = document.querySelector("#coursecode").value;
 //     var ugPg = document.querySelector("#ugpg").value;
@@ -43,7 +52,10 @@ var facultyForm = document.querySelector("form");
 // });
 
 
+
+
 facultyForm.addEventListener("submit", function (e) {
+    
     e.preventDefault();
     var coursCode = document.querySelector("#coursecode").value;
     var ugPg = document.querySelector("#ugpg").value;
@@ -56,6 +68,8 @@ facultyForm.addEventListener("submit", function (e) {
     var taRollNumber2 = document.querySelector("#prefta2").value;
     var taRollNumber3 = document.querySelector("#prefta3").value;
     var password = document.querySelector('#password').value;
+    
+
     var data = {
         "id": coursCode,
         "password": password
@@ -109,6 +123,7 @@ facultyForm.addEventListener("submit", function (e) {
         });
     });
 
-    
+  
+
     facultyForm.reset();
 });

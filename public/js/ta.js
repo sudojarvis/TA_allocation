@@ -1,4 +1,10 @@
 
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+
+const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+const document = dom.window.document;
+
 var facultyForm = document.querySelector("form");
 
 facultyForm.addEventListener("submit", function (e) {
