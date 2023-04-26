@@ -3,8 +3,8 @@
 // const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
 // const document = dom.window.document;
 var facultyForm = document.querySelector("form");
-facultyForm.addEventListener("submit", function () {
-    
+facultyForm.addEventListener("submit", function (e) {
+    e.preventDefault();
     
     var coursCode = document.querySelector("#coursecode").value;
     var ugPg = document.querySelector("#ugpg").value;
@@ -22,20 +22,20 @@ facultyForm.addEventListener("submit", function () {
         "id": coursCode,
         "password": password
     }
-    var url = '/checkpasswordprof';
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    }).then((response) => {
-        response.json().then((data) => {
-            if (data.error) {
-                messageLoc.textContent = data.error;
-            } else {
-                console.log(data.check);
-                if (data.check == "yes") {
+    // var url = '/checkpasswordprof';
+    // fetch(url, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(data)
+    // }).then((response) => {
+    //     response.json().then((data) => {
+    //         if (data.error) {
+    //             messageLoc.textContent = data.error;
+    //         } else {
+    //             console.log(data.check);
+    //             if (data.check == "yes") {
 
 
                     var data = {
@@ -66,9 +66,9 @@ facultyForm.addEventListener("submit", function () {
                             }
                         });
                     });
-                }
-            }
-        });
-    });
+    //             }
+    //         }
+    //     });
+    // });
     facultyForm.reset();
 });

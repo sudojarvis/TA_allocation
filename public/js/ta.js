@@ -7,7 +7,8 @@
 
 var facultyForm = document.querySelector("form");
 
-facultyForm.addEventListener("submit", function () {
+facultyForm.addEventListener("submit", function (e) {
+    e.preventDefault();
     
     var rollNumber = document.querySelector("#rollNumber").value;
     var pref1 = document.querySelector("#pref1").value;
@@ -19,20 +20,20 @@ facultyForm.addEventListener("submit", function () {
         "id": rollNumber,
         "password": password
     }
-    var url = '/checkpasswordta';
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    }).then((response) => {
-        response.json().then((data) => {
-            if (data.error) {
-                messageLoc.textContent = data.error;
-            } else {
-                console.log(data.check);
-                if (data.check == "yes") {
+    // var url = '/checkpasswordta';
+    // fetch(url, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(data)
+    // }).then((response) => {
+    //     response.json().then((data) => {
+    //         if (data.error) {
+    //             messageLoc.textContent = data.error;
+    //         } else {
+    //             console.log(data.check);
+    //             if (data.check == "yes") {
 
                     var data = {
                         "rollNumber": rollNumber,
@@ -57,10 +58,10 @@ facultyForm.addEventListener("submit", function () {
                             }
                         });
                     });
-                }
-            }
-        });
-    });
+                // }
+    //         }
+    //     });
+    // });
 
 
     facultyForm.reset();
