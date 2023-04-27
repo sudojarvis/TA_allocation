@@ -1,6 +1,10 @@
 const { disable } = require('express/lib/application');
 const mongoose = require('mongoose');
+const connectionUrl = 'mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test';
 
+mongoose.connect(connectionUrl, {
+    useNewUrlParser : true
+});
 
 const taSchema = mongoose.Schema({
     rollNumber : {

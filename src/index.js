@@ -118,8 +118,9 @@ app.post("/profdetails", async (req, res) => {
 		// console.log(req.body);
 		const courseCode = req.body.courseCode;
 		const prof = await PROF.findOneAndDelete({ courseCode });
+		console.log(prof);
 		const newProf = new PROF(req.body);
-		console.log(newProf);
+		// console.log(newProf);
 		await newProf.save();
 		res.status(201).send(newProf);
 	} catch (e) {
@@ -227,11 +228,24 @@ app.get("/result", async (req, res) => {
 	XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
 	XLSX.writeFile(workbook, 'allotment.xlsx')
 	// res.end('<p><a download="file.zip" href="/hostedFile.zip">Download</a></p>\n');
-
+	// res.download("./public/assets/allotment.xlsx");
 	
 });
-app.get("/download-file", (req, res) => {
-	res.download("./public/assets/allotment.xlsx");
+app.get("/download-file", async (req, res) => {
+	const prof = await PROF.find();
+	const ta = await TA.find();
+	// res.send(match)
+	result = allotment(prof, ta);
+	// result2 = res.json(allotment(prof, ta));	
+	const sheet = XLSX.utils.json_to_sheet(result);
+	
+	const workbook = XLSX.utils.book_new();
+	XLSX.utils.book_append_sheet(workbook, sheet, "Allotment");
+	const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+	XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
+	XLSX.writeFile(workbook, 'allotment.xlsx')
+	res.download("./allotment.xlsx");
 	// res.download("allotment.xlsx");
   });
 

@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-
+const connectionUrl = 'mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test';
+mongoose.connect(connectionUrl, {
+    useNewUrlParser : true
+});
 
 const profSchema = mongoose.Schema({
     courseCode : {
