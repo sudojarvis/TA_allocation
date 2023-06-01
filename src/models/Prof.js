@@ -42,6 +42,16 @@ const profSchema = mongoose.Schema({
         lowercase : true,
         required : true
     },
+    cgpa :{
+        type : Number,
+        required : true
+    },
+    courseGrade: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        required: true
+    },
     taRollNumber1 : {
         type : String,
         trim : true,

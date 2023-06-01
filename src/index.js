@@ -192,6 +192,8 @@ app.get("/showdata", async (req, res) => {
 		obj1["needToAttend"] = prof[i].needToAttend;
 		obj1["noOfStudents"] = prof[i].nof;
 		obj1["theoryLab"] = prof[i].theoryLab;
+		obj1["courseGrade"] = prof[i].courseGrade;
+		obj1["cgpa"] = prof[i].cgpa;
 		obj1["taRollNumber1"] = prof[i].taRollNumber1;
 		obj1["taRollNumber2"] = prof[i].taRollNumber2;
 		obj1["taRollNumber3"] = prof[i].taRollNumber3;
@@ -207,7 +209,7 @@ app.get("/showdata", async (req, res) => {
 		obj["pref3"] = ta[i].pref3;
 		tadetail.push(obj);
 	}
-	
+	console.log(coursedetail);
 	res.send({ coursedetail, tadetail });
 	
 });
