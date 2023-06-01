@@ -204,12 +204,17 @@ app.get("/showdata", async (req, res) => {
 	for (var i = 0; i < ta.length; i++) {
 		var obj = {};
 		obj["rollNumber"] = ta[i].rollNumber;
+		obj["cgpa"] = ta[i].cgpa;
 		obj["pref1"] = ta[i].pref1;
+		obj["course_grade_pref1"] = ta[i].course_grade_pref_1;
 		obj["pref2"] = ta[i].pref2;
+		obj["course_grade_pref2"] = ta[i].course_grade_pref_2;
 		obj["pref3"] = ta[i].pref3;
+		obj["course_grade_pref3"] = ta[i].course_grade_pref_3;
 		tadetail.push(obj);
 	}
 	console.log(coursedetail);
+	console.log(tadetail);
 	res.send({ coursedetail, tadetail });
 	
 });

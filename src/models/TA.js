@@ -13,9 +13,19 @@ const taSchema = mongoose.Schema({
         lowercase : true,
         required : true
     },
+    cgpa : {
+        type : Number,
+        required : true
+    },
     pref1 : {
         type : String,
         trim : true, 
+        lowercase : true,
+        required : true
+    },
+    course_grade_pref_1 : {
+        type : String,
+        trim : true,
         lowercase : true,
         required : true
     },
@@ -25,9 +35,21 @@ const taSchema = mongoose.Schema({
         lowercase : true,
         required : true
     },
+    course_grade_pref_2 : {
+        type : String,
+        trim : true,
+        lowercase : true,
+        required : true
+    },
     pref3 : {
         type : String,
         trim : true, 
+        lowercase : true,
+        required : true
+    },
+    course_grade_pref_3 : {
+        type : String,
+        trim : true,
         lowercase : true,
         required : true
     }
