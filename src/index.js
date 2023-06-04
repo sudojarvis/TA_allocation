@@ -225,15 +225,20 @@ app.get("/result", async (req, res) => {
 	const ta = await TA.find();
 	// res.send(match)
 	result = allotment(prof, ta);
-	result2 = res.json(allotment(prof, ta));	
-	const sheet = XLSX.utils.json_to_sheet(result);
-	
-	const workbook = XLSX.utils.book_new();
-	XLSX.utils.book_append_sheet(workbook, sheet, "Allotment");
-	const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+	// console.log(prof);
+	// console.log(ta);
+	result2 = result.replace(/\\/g, "");
 
-	XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
-	XLSX.writeFile(workbook, 'allotment.xlsx')
+	res.send(result2);
+
+	// const sheet = XLSX.utils.json_to_sheet(result);
+	
+	// const workbook = XLSX.utils.book_new();
+	// XLSX.utils.book_append_sheet(workbook, sheet, "Allotment");
+	// const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+	// XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
+	// XLSX.writeFile(workbook, 'allotment.xlsx')
 	// res.end('<p><a download="file.zip" href="/hostedFile.zip">Download</a></p>\n');
 	// res.download("./public/assets/allotment.xlsx");
 	

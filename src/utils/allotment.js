@@ -1,250 +1,247 @@
+const { json } = require("body-parser");
 
 function allotment(prof, ta) {
-    /* 
-    prof = array of objects with following properties
-    __id,
-    courseCode,             type string
-    ugPg,                          string 
-    electiveCore,                  string
-    needToAttend,                  string 
-    taRollNumber1,                 string
-    taRollNumber2,                 string
-    taRollNumber3,                 string
-    nof,                           number
-    theorylab                      string
-
-    ta = array of objects with following properties
-    rollNumber,              string
-    pref1,                   string
-    pref2,                   string
-    pref3,                   string
-    expert1,                 string
-    expert2,                 string
-    expert3                  string
-
-    NOTE: If some entry is not provided then it is an empty string
-    */
-    /*
-    return an object with following properties
-    courseCode,
-    expertTa,
-    traineeTa
-    */
-
-    const ceel = (a, b) => {
-        var c = 15;
-        if (b == 'theory') c = 30;
-        var ans = a / c;
-        return Math.ceil(ans);
+    const matching = [];
+    const professorAssigned = {};
+    const taAssigned = {};
+  
+    // Helper function to compare TAs based on CGPA and course grade
+   function checkCourseGrade(a, b) {
+    const courseGrade = ['f','e-','e','d-','d','c-','c','b-','b','a-','a'];
+    if (courseGrade.indexOf(a) >= courseGrade.indexOf(b)) {
+        return 1;
+    } else {
+        return 0;
     }
+   }
 
+
+
+  
+    // Helper function to check if a TA prefers a professor over the current assignment
+    function prefersProfessor(ta, professor, currentProfessor) {
+      const taPreferencesForProfessor = taPreferences[ta.rollNumber];
+      return taPreferencesForProfessor.findIndex(entry => entry.courseCode === professor.courseCode) <
+             taPreferencesForProfessor.findIndex(entry => entry.courseCode === currentProfessor.courseCode);
+    }
+  
+    // Initialize professor and TA arrays
+    const professors = prof.map(p => ({
+      courseCode: p.courseCode,
+      taRollNumbers: [p.taRollNumber1, p.taRollNumber2, p.taRollNumber3],
+      branch: p.branch,
+      theoryLab: p.theoryLab,
+      noOfStudents: p.nof,
+      cgpa: p.cgpa,
+      courseGrade: p.courseGrade
+
+    }));
+    const tas = ta.map(t => ({
+      rollNumber: t.rollNumber,
+      preferences: [
+        {courseCode: t.pref1, courseGrade: t.course_grade_pref_1},
+        {courseCode: t.pref2, courseGrade: t.course_grade_pref_2},
+        {courseCode: t.pref3, courseGrade: t.course_grade_pref_3}
+      ],
+      branch: t.branch,
+      cgpa: t.cgpa,
+    //   courseGrade: t.courseGrade
+    }));
     
+    // console.log("professors",professors);
+    // console.log("tas",tas);
 
-    var profarr = [];
-    var taarr = [];
-    var cap = {};
+    // console.log(tas[0].preferences);
+    // Create TA preferences object
+    // const taPreferences = {};
+    // ta.forEach(t => {
+    //   taPreferences[t.rollNumber] = [];
+    //   if (t.preferences) {  // Add a check to ensure preferences array exists
+    //     t.preferences.forEach(p => {
+    //       taPreferences[t.rollNumber].push(p);
+    //     });
+    //   }
+    // });
+    // console.log("taPreferences",taPreferences);
+    // Assign TAs to professors based on preferences, branch, CGPA, and course grade
+    // const unassignedProfessor = { ...professor };
+    professors.forEach(professor => {
+    //   const unassignedProfessor = { ...professor };
+      studentPerTA = professor.theoryLab =="theory" ? 30 : 15;
+      noOfTaRequired = Math.ceil(professor.noOfStudents/studentPerTA);
 
-    var n = prof.length, m = ta.length;
-    for (var i = 0; i < n; i++) {
-        profarr.push(prof[i].courseCode);
-
-        cap[prof[i].courseCode] = ceel(prof[i].nof, prof[i].theoryLab);
-    }
-    for (var i = 0; i < m; i++) {
-        taarr.push(ta[i].rollNumber)
-    }
-    var A = {};
-    var B = {};
-
-
-    var checkIfPresent = (arr, s) => {
-        for (var i = 0; i < arr.length; i++) {
-            if (s === arr[i]) return false;
-        }
-        return true;
-    }
-
-    for (var i = 0; i < profarr.length; i++) {
-        A[profarr[i]] = [];
-        if (prof[i].taRollNumber1 != "") {
-            for (var j = 0; j < taarr.length; j++){
-                if (taarr[j].length >= prof[i].taRollNumber1.length) {
-                    var flag3 = 0;
-                    for (var k = 0; k < prof[i].taRollNumber1.length; k++){
-                        if ((prof[i].taRollNumber1)[k] !== taarr[j][k]) {
-                            flag3 = 1;
-                            break;
-                        }
-                    }
-                    
-                    if (flag3 === 0 && checkIfPresent(A[profarr[i]],taarr[j])) {
-                        A[profarr[i]].push(taarr[j]);
-                    }
-                }
-            }
-        }
-
-        if (prof[i].taRollNumber2 != "") {
-            for (var j = 0; j < taarr.length; j++){
-                if (taarr[j].length >= prof[i].taRollNumber2.length) {
-                    var flag4 = 0;
-                    for (var k = 0; k < prof[i].taRollNumber2.length; k++){
-                        if ((prof[i].taRollNumber2)[k] !== taarr[j][k]) {
-                            flag4 = 1;
-                            break;
-                        }
-                    }
-                    if (flag4 === 0 && checkIfPresent(A[profarr[i]],taarr[j])) {
-                        A[profarr[i]].push(taarr[j]);
-                    }
-                }
-            }
-        }
-
-        if (prof[i].taRollNumber3 != "") {
-            for (var j = 0; j < taarr.length; j++){
-                if (taarr[j].length >= prof[i].taRollNumber3.length) {
-                    var flag5 = 0;
-                    for (var k = 0; k < prof[i].taRollNumber3.length; k++){
-                        if ((prof[i].taRollNumber3)[k] !== taarr[j][k]) {
-                            flag5 = 1;
-                            break;
-                        }
-                    }
-                    if (flag5 === 0 && checkIfPresent(A[profarr[i]],taarr[j])) {
-                        A[profarr[i]].push(taarr[j]);
-                    }
-                }
-            }
-        }
-        for (var j = 0; j < m; j++) {
-            var flag = true;
-            for (var k = 0; k < A[profarr[i]].length; k++) {
-                if (A[profarr[i]][k] === taarr[j]) flag = false;
-            }
-            if (flag) {
-                A[profarr[i]].push(taarr[j]);
-            }
-        }
-    }
-    /////////////////////////////////////////
-
-
-    for (var i = 0; i < taarr.length; i++) {
-        B[taarr[i]] = [];
-        if (ta[i].pref1 != "" && !checkIfPresent(profarr, ta[i].pref1)) B[taarr[i]].push(ta[i].pref1);
-        if (ta[i].pref2 != "" && !checkIfPresent(profarr, ta[i].pref2)) B[taarr[i]].push(ta[i].pref2);
-        if (ta[i].pref3 != "" && !checkIfPresent(profarr, ta[i].pref3)) B[taarr[i]].push(ta[i].pref3);
-        for (var j = 0; j < n; j++) {
-            var flag = true;
-            for (var k = 0; k < B[taarr[i]].length; k++) {
-                if (B[taarr[i]][k] === profarr[j]) flag = false;
-            }
-            if (flag) {
-                B[taarr[i]].push(profarr[j]);
-            }
-        }
-    }
-
-
-    ///////////////////////////////////
-
-
-    var match = {};
-    for (var i = 0; i < m; i++) match[taarr[i]] = [];
-
-    var courseCounter = {};
-    for (var i = 0; i < profarr.length; i++) courseCounter[profarr[i]] = 0;
-    while (true) {
-        var rem = [];
-        for (var i = 0; i < n; i++) rem.push(profarr[i]);
-        var count = 0
-        while (rem.length !== 0) {
-            var course = rem[0];
-
-            //////
-
-            if (courseCounter[course] >= cap[course]) {
-                rem.shift();
-                continue;
-            }
-            for (var j = 0; j < A[course].length; j++) {
-                var a = A[course][j];
-                var already_have = false;
-                for (var id =  0; id < match[a].length; id++) {
-                    if (match[a][id] == course) already_have = true;
-                }
-                if (already_have) continue;
-                if (match[a].length < 3) {
-                    match[a].push(course);
-                    courseCounter[course]++;
-                    count++;
-                    break;
-                } else {
-                    var temp = [-1, -1, -1];
-                    var apref
-
-                    for (var k = B[a].length - 1; k >= 0; k--) {
-
-                        for (var e = 0; e < 3; e++) {
-                            if (match[a][e] == B[a][k]) {
-                                temp[e] = k;
-                            }
-                        }
-                        if (a == B[a][k]) apref = k;
-                    }
-                    var f = 0;
-                    for (var k = 0; k < 3; k++) {
-                        if (apref == temp[k]) f = 1;
-                    }
-                    if (f === 1) continue;
-                    var ind = 0
-                    for (var k = 1; k < 3; k++) {
-                        if (temp[k] > temp[ind]) {
-                            ind = k;
-                        }
-                    }
-                    if (temp[ind] > apref) {
-                        courseCounter[match[a][ind]]--;
-                        match[a][ind] = course;
-                        courseCounter[course]++;
-                        count++;
-                        break;
-                    }
-                }
-            }
-
-            rem.shift();
-        }
-        if (count === 0) {
-            break
-        }
-    }
-    var match2 = {}
-    for (var i = 0; i < profarr.length; i++) match2[profarr[i]] = [];
-    for (var i = 0; i < taarr.length; i++){
-        for (var j = 0; j < match[taarr[i]].length; j++){
-            match2[match[taarr[i]][j]].push(taarr[i]);
-        }
-    }
-    for (var i = 0; i < taarr.length; i++){
-        match2[taarr[i]] = match[taarr[i]]
-    }
-    match2 = JSON.stringify(match2);
-    match2 = '['+match2+']';
-    //convert match2 to json again
-    match2 = JSON.parse(match2);
-    //for loop on match2, convert value of each key to string
-    for (var i = 0; i < match2.length; i++){
-        for (var key in match2[i]){
-            match2[i][key] = match2[i][key].toString();
-        }
-    }
+    //   console.log("noOfTaRequired",noOfTaRequired);
+      let assignedTA = null;
+      matching.push({ courseCode: professor.courseCode, expertTa: [], traineeTa: [] });
+      // Check if any TA from the professor's preference list is available
+      for (const taRollNumber of professor.taRollNumbers) {
+        const taIndex = tas.findIndex(ta => ta.rollNumber === taRollNumber);
+        if (taIndex !== -1 && !taAssigned[taRollNumber]) {
+          const ta = tas[taIndex];
+          assignedTA = ta;
+        //   console.log("assignedTA",assignedTA);
+        //   matching.push({ courseCode: professor.courseCode, expertTa: [], traineeTa: [] });
+        if(noOfTaRequired>0){
+            matching.find(m => m.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
+            // matching.find(taRollNumber => taRollNumber.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
     
-    return match2;
-    // return match;
+            console.log("matching",matching);
+            taAssigned[ta.rollNumber] = true;
+            noOfTaRequired--;
+        }
+        if(noOfTaRequired==0){
+            break;
+            }
+
+        }
+    }
+    // console.log("matching",matching);
+    if(noOfTaRequired>0){
+
+        tempTA0=tas.filter((t) => {
+            if(!taAssigned[t.rollNumber] && t.preferences[0].courseCode==professor.courseCode){
+                if(checkCourseGrade(t.preferences[0].courseGrade,professor.courseGrade)){
+                    return t;
+         
+                }
+            }
+        });
+        tempTA1=tas.filter((t) => {
+            if(!taAssigned[t.rollNumber] && t.preferences[1].courseCode==professor.courseCode){
+                if(checkCourseGrade(t.preferences[1].courseGrade,professor.courseGrade)){
+                    return t;
+                }
+            }
+        });
+        tempTA2=tas.filter((t) => {
+            if(!taAssigned[t.rollNumber] && t.preferences[2].courseCode==professor.courseCode){
+                if(checkCourseGrade(t.preferences[2].courseGrade,professor.courseGrade)){
+                    return t;
+                }
+            }
+        });
+
+        eligibleTa=[];
+
+        for(const t of tempTA0){
+            eligibleTa.push({
+                rollNumber:t.rollNumber,
+                pref:t.preferences[0].courseCode,
+                cgpa:t.cgpa,
+                courseGrade:t.preferences[0].courseGrade
+            });
+        }
+
+        for(const t of tempTA1){
+            eligibleTa.push({
+                rollNumber:t.rollNumber,
+                pref:t.preferences[1].courseCode,
+                cgpa:t.cgpa,
+                courseGrade:t.preferences[1].courseGrade
+            });
+        }
+
+        for(const t of tempTA2){
+            eligibleTa.push({
+                rollNumber:t.rollNumber,
+                pref:t.preferences[2].courseCode,
+                cgpa:t.cgpa,
+                courseGrade:t.preferences[2].courseGrade
+            });
+        }
+
+        // console.log("eligibleTa",eligibleTa);
+
+        //assignig the ta to the professor
+
+        for(const t of eligibleTa){
+            if(noOfTaRequired>0){
+                matching.find(m => m.courseCode === professor.courseCode).traineeTa.push(t.rollNumber);
+                taAssigned[t.rollNumber] = true;
+                noOfTaRequired--;
+            }
+            if(noOfTaRequired==0){
+                break;
+            }
+        }
+    }    
+    
+      
+    });
+
+
+    jsonMatching = JSON.stringify(matching);
+    // jsonMatching = JSON.parse(jsonMatching);
+    return jsonMatching;
+    // return matching;
 }
 
 
-
 module.exports = allotment;
+
+
+
+//   const prof = [
+//     {
+//     //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
+//       courseCode: 'eel1010',
+//       ugPg: 'ug',
+//       electiveCore: 'core',
+//       needToAttend: 0,
+//       nof: 120,
+//       theoryLab: 'theory',
+//       cgpa: 8,
+//       courseGrade: 'a',
+//       taRollNumber1: 'b20ee011',
+//       taRollNumber2: 'b20ee0123',
+//       taRollNumber3: 'b20ee0124',
+//       __v: 0
+//     },
+//     {
+//     //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
+//       courseCode: 'csl1010',
+//       ugPg: 'ug',
+//       electiveCore: 'core',
+//       needToAttend: 0,
+//       nof: 123,
+//       theoryLab: 'theory',
+//       cgpa: 8,
+//       courseGrade: 'a',
+//       taRollNumber1: 'b20ee011',
+//       taRollNumber2: 'b20cs010',
+//       taRollNumber3: 'b30cs000',
+//       __v: 0
+//     }
+//   ];
+  
+
+//   const ta = [
+//     {
+//     //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
+//       rollNumber: 'b20ee011',
+//       cgpa: 9,
+//       pref1: 'eel1010',
+//       course_grade_pref_1: 'a',
+//       pref2: 'eel1020',
+//       course_grade_pref_2: 'a',
+//       pref3: 'eel1030',
+//       course_grade_pref_3: 'a-',
+//       __v: 0
+//     },
+//     {
+//     //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+//       rollNumber: 'b20cs010',
+//       cgpa: 9,
+//       pref1: 'csl1010',
+//       course_grade_pref_1: 'a',
+//       pref2: 'csl1020',
+//       course_grade_pref_2: 'a',
+//       pref3: 'csl1030',
+//       course_grade_pref_3: 'a',
+//       __v: 0
+//     }
+//   ];
+  
+//   const result = allotment(prof, ta);
+//   console.log("result",result);
+//   console.log(result);
