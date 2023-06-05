@@ -4,7 +4,7 @@ const XLSX = require("xlsx");
 
 function allotment(prof, ta) {
     const matching = [];
-    const professorAssigned = {};
+    // const professorAssigned = {};
     const taAssigned = {};
   
     // Helper function to compare TAs based on CGPA and course grade
@@ -24,11 +24,11 @@ function allotment(prof, ta) {
     //   branch: p.branch,
       theoryLab: p.theoryLab,
       noOfStudents: p.nof,
-      cgpa: p.cgpa,
+    //   cgpa: p.cgpa,
       courseGrade: p.courseGrade
 
     }));
-    console.log("professors",professors);
+    // console.log("professors",professors);
 
     // console.log("professors",professors);
 
@@ -40,12 +40,12 @@ function allotment(prof, ta) {
         {courseCode: t.pref3, courseGrade: t.course_grade_pref_3}
       ],
     //   branch: t.branch,
-      cgpa: t.cgpa,
+    //   cgpa: t.cgpa,
     //   courseGrade: t.courseGrade
     }));
     
     // console.log("professors",professors);
-    console.log("tas",tas);
+    // console.log("tas",tas);
 
     professors.forEach(professor => {
     //   const unassignedProfessor = { ...professor };
@@ -227,7 +227,7 @@ function allotment(prof, ta) {
                 eligibleTa.push({
                     rollNumber:t.rollNumber,
                     pref:t.preferences[0].courseCode,
-                    cgpa:t.cgpa,
+                    // cgpa:t.cgpa,
                     courseGrade:t.preferences[0].courseGrade
                 });
             }
@@ -236,7 +236,7 @@ function allotment(prof, ta) {
                 eligibleTa.push({
                     rollNumber:t.rollNumber,
                     pref:t.preferences[1].courseCode,
-                    cgpa:t.cgpa,
+                    // cgpa:t.cgpa,
                     courseGrade:t.preferences[1].courseGrade
                 });
             }
@@ -245,7 +245,7 @@ function allotment(prof, ta) {
                 eligibleTa.push({
                     rollNumber:t.rollNumber,
                     pref:t.preferences[2].courseCode,
-                    cgpa:t.cgpa,
+                    // cgpa:t.cgpa,
                     courseGrade:t.preferences[2].courseGrade
                 });
             }

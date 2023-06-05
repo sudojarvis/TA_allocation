@@ -11,7 +11,7 @@ facultyForm.addEventListener("submit", function (e) {
     var electiveCore = document.querySelector("#elective").value;
     var needToAttend = document.querySelector("#needto").value;
     var nof = document.querySelector("#nof").value;
-    var cgpa=document.querySelector("#cgpa").value;
+    // var cgpa=document.querySelector("#cgpa").value;
     var courseGrade=document.querySelector("#courseGrade").value;
     var theoryLab = document.querySelector("#theorylab").value;
     var taRollNumber1 = document.querySelector("#prefta1").value;
@@ -46,7 +46,7 @@ facultyForm.addEventListener("submit", function (e) {
                         "electiveCore": electiveCore,
                         "needToAttend": needToAttend,
                         "nof": nof,
-                        "cgpa": cgpa,
+                        // "cgpa": cgpa,
                         "courseGrade": courseGrade,
                         "theoryLab": theoryLab,
                         "taRollNumber1": taRollNumber1,

@@ -42,10 +42,10 @@ const profSchema = mongoose.Schema({
         lowercase : true,
         required : true
     },
-    cgpa :{
-        type : Number,
-        required : true
-    },
+    // cgpa :{
+    //     type : Number,
+    //     required : true
+    // },
     courseGrade: {
         type: String,
         trim: true,
