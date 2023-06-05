@@ -12,6 +12,7 @@ const ID_prof = require("./models/ID_prof");
 const ID_admin = require("./models/ID_admin");
 const auth = require('../src/middleware/auth');
 const XLSX = require('xlsx');
+const ExcelJS = require('exceljs');
 const app = express();
 // const port = process.env.PORT;
 const port = 3000;
@@ -227,9 +228,38 @@ app.get("/result", async (req, res) => {
 	result = allotment(prof, ta);
 	// console.log(prof);
 	// console.log(ta);
-	result2 = result.replace(/\\/g, "");
+	// const ExcelJS = require('exceljs');
 
-	res.send(result2);
+	const data = result;
+	
+	  // Create a new workbook
+	  const workbook = new ExcelJS.Workbook();
+	  const worksheet = workbook.addWorksheet('Sheet1');
+	
+	  // Set headers
+	  worksheet.getCell(1, 1).value = 'course Code';
+	  worksheet.getCell(1, 2).value = 'ExpertTa';
+	
+	  // Split the values and assign them to separate columns
+	  data.forEach((item, index) => {
+	    worksheet.getCell(index + 2, 1).value = item.courseCode;
+	
+	    const values = item.expertTa.split(',');
+	
+	    values.forEach((value, columnIndex) => {
+	      worksheet.getCell(index + 2, columnIndex + 2).value = value;
+	    });
+	  });
+	
+	  // Save the workbook
+	  workbook.xlsx.writeFile('allotment.xlsx')
+	    .then(() => {
+	      console.log('Excel file generated successfully.');
+	    })
+	    .catch((error) => {
+	      console.log('Error generating Excel file:', error);
+	    });
+
 
 	// const sheet = XLSX.utils.json_to_sheet(result);
 	
@@ -248,16 +278,52 @@ app.get("/download-file", async (req, res) => {
 	const ta = await TA.find();
 	// res.send(match)
 	result = allotment(prof, ta);
-	// result2 = res.json(allotment(prof, ta));	
-	const sheet = XLSX.utils.json_to_sheet(result);
-	
-	const workbook = XLSX.utils.book_new();
-	XLSX.utils.book_append_sheet(workbook, sheet, "Allotment");
-	const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
 
-	XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
-	XLSX.writeFile(workbook, 'allotment.xlsx')
+	const data = result;
+	
+	// Create a new workbook
+	const workbook = new ExcelJS.Workbook();
+	const worksheet = workbook.addWorksheet('Sheet1');
+  
+	// Set headers
+	worksheet.getCell(1, 1).value = 'course Code';
+	worksheet.getCell(1, 2).value = 'ExpertTa';
+  
+	// Split the values and assign them to separate columns
+	data.forEach((item, index) => {
+	  worksheet.getCell(index + 2, 1).value = item.courseCode;
+  
+	  const values = item.expertTa.split(',');
+  
+	  values.forEach((value, columnIndex) => {
+		worksheet.getCell(index + 2, columnIndex + 2).value = value;
+	  });
+	});
+
+	// Save the workbook
+	workbook.xlsx.writeFile('allotment.xlsx')
+	  .then(() => {
+		console.log('Excel file generated successfully.');
+	  })
+	  .catch((error) => {
+		console.log('Error generating Excel file:', error);
+
+	  });
+	  
 	res.download("./allotment.xlsx");
+  
+
+	
+	// result2 = res.json(allotment(prof, ta));	
+	// const sheet = XLSX.utils.json_to_sheet(result);
+	
+	// const workbook = XLSX.utils.book_new();
+	// XLSX.utils.book_append_sheet(workbook, sheet, "Allotment");
+	// const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+	// XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
+	// XLSX.writeFile(workbook, 'allotment.xlsx')
+	// res.download("./allotment.xlsx");
 	// res.download("allotment.xlsx");
   });
 
