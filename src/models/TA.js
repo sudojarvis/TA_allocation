@@ -13,10 +13,10 @@ const taSchema = mongoose.Schema({
         lowercase : true,
         required : true
     },
-    // cgpa : {
-    //     type : Number,
-    //     required : true
-    // },
+    cgpa : {
+        type : Number,
+        required : true
+    },
     pref1 : {
         type : String,
         trim : true, 
