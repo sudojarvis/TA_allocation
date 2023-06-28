@@ -50,8 +50,6 @@ function allotment(prof, ta) {
   function findProfessorByTARollNumber(professors, taRollNumber, excludedProfessor) {
     return professors.filter(professor => professor.courseCode !== excludedProfessor && courseChosenByTa(taRollNumber,tas,professor.courseCode));
   }
-  
-
 
     const professors = prof.map(p => ({
       courseCode: p.courseCode,
@@ -62,6 +60,8 @@ function allotment(prof, ta) {
       noOfStudents: p.nof,
       cgpa: p.cgpa,
       courseGrade: p.courseGrade,
+      instructor: p.instructorName,
+      courseName: p.courseName,
       // weigth: prof.indexOf(p)+1
     }));
     // console.log("professors",professors);
@@ -76,6 +76,7 @@ function allotment(prof, ta) {
         {courseCode: t.pref3, courseGrade: t.course_grade_pref_3,weight:1}
       ],
       cgpa: t.cgpa,
+      upperCap: 4,
     }));
     
     // console.log("professors",professors);
@@ -86,7 +87,9 @@ function allotment(prof, ta) {
 
     var noOfTaRequired = Math.ceil(professor.noOfStudents / studentPerTA);
     // console.log("noOfTaRequired",noOfTaRequired);
-    matching.push({ courseCode: professor.courseCode, expertTa: [] });
+    // matching.push({ courseCode: professor.courseCode, expertTa: [] });
+    matching.push({ courseCode: professor.courseCode, instructor: professor.instructor, courseName: professor.courseName, expertTa: [] });
+
 
     const taWithSameCourse = tas.filter(ta =>
         ta.preferences.some(preference => preference.courseCode === professor.courseCode)
@@ -94,11 +97,9 @@ function allotment(prof, ta) {
     // taWithSameCourse.sort((a, b) => b.cgpa - a.cgpa);
     // console.log("taWithSameCourse",taWithSameCourse);
 
-
-
-    const ta1 = taWithSameCourse.filter(ta => ta.preferences[0].courseCode === professor.courseCode);
-    const ta2 = taWithSameCourse.filter(ta => ta.preferences[1].courseCode === professor.courseCode);
-    const ta3 = taWithSameCourse.filter(ta => ta.preferences[2].courseCode === professor.courseCode);
+    const ta1 = taWithSameCourse.filter(ta => ta.preferences[0].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade));
+    const ta2 = taWithSameCourse.filter(ta => ta.preferences[1].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade));
+    const ta3 = taWithSameCourse.filter(ta => ta.preferences[2].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade));
     
     const ta1_=[];
     for(const ta of ta1){
@@ -106,7 +107,8 @@ function allotment(prof, ta) {
         rollNumber: ta.rollNumber,
         cgpa: ta.cgpa,
         courseGrade: ta.preferences[0].courseGrade,
-        weight: ta.preferences[0].weight
+        weight: ta.preferences[0].weight,
+        upperCap: ta.upperCap,
     })
     }
     const ta2_=[];
@@ -116,7 +118,8 @@ function allotment(prof, ta) {
         rollNumber: ta.rollNumber,
         cgpa: ta.cgpa,
         courseGrade: ta.preferences[1].courseGrade,
-        weight: ta.preferences[1].weight
+        weight: ta.preferences[1].weight,
+        upperCap: ta.upperCap,
     })
     }
     const ta3_=[];
@@ -125,7 +128,8 @@ function allotment(prof, ta) {
         rollNumber: ta.rollNumber,
         cgpa: ta.cgpa,
         courseGrade: ta.preferences[2].courseGrade,
-        weight: ta.preferences[2].weight
+        weight: ta.preferences[2].weight,
+        upperCap: ta.upperCap,
         });
     }
     const temp = [...ta1_, ...ta2_, ...ta3_];
@@ -153,11 +157,8 @@ function allotment(prof, ta) {
 
     for(const profTaRollNumber of professor.preferences){
 
-  
-      // console.log("arrOfBatch",arrOfBatch);
-
-      // console.log('taRollNumber',taRollNumber.rollNumber);
       const batchTag= arrOfBatch.includes(profTaRollNumber.rollNumber);
+
       // console.log("batchTag",batchTag);
       // x= findProfessorByTARollNumber(professors,ta.rollNumber,professor.courseCode);
       if(!batchTag){
@@ -168,28 +169,33 @@ function allotment(prof, ta) {
             
             var chekWeight= true;
 
-            if(x!==undefined&& !taAssigned[ta.rollNumber]){
+            if(x!==undefined && !taAssigned[ta.rollNumber]){
               x.forEach((pref)=>{
                 pref.preferences.forEach((p)=>{
-                  console.log("p",p,"profTaRollNumber",profTaRollNumber,"weight",profTaRollNumber.weight);
+                  // console.log("p",p,"profTaRollNumber",profTaRollNumber,"weight",profTaRollNumber.weight);
                   if(p.rollNumber===ta.rollNumber && p.weight>profTaRollNumber.weight){
                     chekWeight=false;
                   }
                 })
               })
             }
-            // console.log("x",x);
-            // console.log("chekWeight",chekWeight);
-            // console.log("=======================================");
             
-            if(ta.rollNumber === profTaRollNumber.rollNumber && noOfTaRequired>0 && (profTaRollNumber.weight>= ta.weight||ta.weight>=profTaRollNumber.weight) && chekWeight){
-              // matching.push({ courseCode: professor.courseCode, expertTa: [] });
-              // matching[professor.courseCode].expertTa.push([profTaRollNumber.rollNumber]);
-              // matching[matching.length-1].expertTa.push(profTaRollNumber.rollNumber);
-              matching.find(m => m.courseCode === professor.courseCode).expertTa.push(profTaRollNumber.rollNumber);
-              taAssigned[ta.rollNumber]=true;
-              // console.log("matching",matching.expertTa);
-              // console.log("ta================================================",ta);
+            if(ta.rollNumber === profTaRollNumber.rollNumber && noOfTaRequired>0 && (profTaRollNumber.weight>= ta.weight||ta.weight>=profTaRollNumber.weight) ){//&& chekWeight){
+              
+              // matching.find(m => m.courseCode === professor.courseCode).expertTa.push(profTaRollNumber.rollNumber);
+             
+              const matchingCourse = matching.find(m => m.courseCode === professor.courseCode);
+              
+              if(matchingCourse && !matchingCourse.expertTa || !matchingCourse.expertTa.includes(profTaRollNumber.rollNumber)){
+                matchingCourse.expertTa.push(profTaRollNumber.rollNumber);
+                if(ta.upperCap>0){
+                  ta.upperCap--;
+                }
+                if(ta.upperCap===0){
+                  taAssigned[ta.rollNumber]=true;
+                }
+              }
+                
               
               noOfTaRequired--;
             }
@@ -204,22 +210,6 @@ function allotment(prof, ta) {
       }
 
       if(batchTag){
-        // console.log("batchTag",profTaRollNumber);
-
-
-        // const sepByBatch1=[];
-
-        // for(const ta of tas){
-        //   if(!taAssigned[ta.rollNumber]){ //&& !professor.preferences.includes(ta.rollNumber)){
-        //       tempBatch=ta.rollNumber.slice(0,3);
-        //       console.log("tempBatch",tempBatch);
-        //       if(profTaRollNumber.rollNumber===tempBatch){
-        //           sepByBatch1.push(ta);
-        //       }
-        //   }
-        //   // console.log("sepByBatch",sepByBatch);
-        // }
-        // console.log("sepByBatch1===",sepByBatch1);
 
         const sepByBatch= tas.filter(ta => !taAssigned[ta.rollNumber] && ta.rollNumber.slice(0,3)===profTaRollNumber.rollNumber);
         // console.log("sepByBatch",sepByBatch);
@@ -238,7 +228,8 @@ function allotment(prof, ta) {
                       rollNumber:sepByBatch[k].rollNumber,
                       cgpa:sepByBatch[k].cgpa,
                       courseGrade:sepByBatch[k].preferences[0].courseGrade,
-                      weight:sepByBatch[k].preferences[0].weight
+                      weight:sepByBatch[k].preferences[0].weight,
+                      upperCap:sepByBatch[k].upperCap,
                     });
                     }
                 }
@@ -250,7 +241,8 @@ function allotment(prof, ta) {
                       rollNumber:sepByBatch[k].rollNumber,
                       cgpa:sepByBatch[k].cgpa,
                       courseGrade:sepByBatch[k].preferences[1].courseGrade,
-                      weight:sepByBatch[k].preferences[1].weight
+                      weight:sepByBatch[k].preferences[1].weight,
+                      upperCap:sepByBatch[k].upperCap,
                     });
                   }
                 }
@@ -262,7 +254,8 @@ function allotment(prof, ta) {
                       rollNumber:sepByBatch[k].rollNumber,
                       cgpa:sepByBatch[k].cgpa,
                       courseGrade:sepByBatch[k].preferences[2].courseGrade,
-                      weight:sepByBatch[k].preferences[2].weight
+                      weight:sepByBatch[k].preferences[2].weight,
+                      upperCap:sepByBatch[k].upperCap,
                     });
                 }
             }
@@ -281,7 +274,7 @@ function allotment(prof, ta) {
           x= findProfessorByTARollNumber(professors,temTA[k].rollNumber,professor.courseCode);
           if(noOfTaRequired>0){
             var checkweight1=true;
-            if(x!==undefined&& !taAssigned[ta.rollNumber]){
+            if(x!== undefined && !taAssigned[ta.rollNumber]){
               x.forEach((pref)=>{
                 pref.preferences.forEach((p)=>{
                   // console.log("p",p,"profTaRollNumber",profTaRollNumber,"weight",profTaRollNumber.weight);
@@ -291,38 +284,60 @@ function allotment(prof, ta) {
                 })
               })
             }
-            if(!x){
-
-              matching.find(m => m.courseCode === professor.courseCode).expertTa.push(temTA[k].rollNumber);
-              taAssigned[temTA[k].rollNumber]=true;
-              noOfTaRequired--;
-              break;
+            if (!x) {
+              const matchingCourse = matching.find(
+                (m) => m.courseCode === professor.courseCode
+              );
+            
+              if (matchingCourse &&(!matchingCourse.expertTa || !matchingCourse.expertTa.includes(temTA[k].rollNumber))
+              )
+              {
+                matchingCourse.expertTa.push(temTA[k].rollNumber);
+            
+                if (temTA[k].upperCap > 0) {
+                  temTA[k].upperCap--;
+                }
+                if (temTA[k].upperCap === 0) {
+                  taAssigned[temTA[k].rollNumber] = true;
+                }
+                noOfTaRequired--;
+                break;
+              }
             }
           }
         }
       }
     }
 
-
     if(noOfTaRequired>0){
-      const allTa_0=tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode===ta.preferences[0].courseCode);
-      const allTa_1=tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode===ta.preferences[1].courseCode);
-      const allTa_2=tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode===ta.preferences[2].courseCode);
+      const allTa_0=tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode===ta.preferences[0].courseCode && checkCourseGrade(ta.preferences[0].courseGrade,professor.courseGrade));
+      const allTa_1=tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode===ta.preferences[1].courseCode && checkCourseGrade(ta.preferences[1].courseGrade,professor.courseGrade));
+      const allTa_2=tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode===ta.preferences[2].courseCode && checkCourseGrade(ta.preferences[2].courseGrade,professor.courseGrade));
       const allTa=[...allTa_0,...allTa_1,...allTa_2];
       allTa.sort((a, b) => {b.cgpa - a.cgpa});
       sortOnGrade(allTa);
       for(var k=0;k<allTa.length;k++){
-        matching.find(m => m.courseCode === professor.courseCode).expertTa.push(allTa[k].rollNumber);
-        taAssigned[allTa[k].rollNumber]=true;
-        noOfTaRequired--;
-        if(noOfTaRequired===0){
-          break;
+        // matching.find(m => m.courseCode === professor.courseCode).expertTa.push(allTa[k].rollNumber);
+
+        const matchingCourse = matching.find(m=>m.courseCode === professor.courseCode);
+        if(matchingCourse && (!matchingCourse.expertTa || !matchingCourse.expertTa.includes(allTa[k].rollNumber))){
+          matchingCourse.expertTa.push(allTa[k].rollNumber);
+
+          if(allTa[k].upperCap>0){
+            allTa[k].upperCap--;
+          }
+          if(allTa[k].upperCap===0){
+            taAssigned[allTa[k].rollNumber]=true;
+          }
+
+          noOfTaRequired--;
+          if(noOfTaRequired===0){
+            break;
+          }
         }
 
       }
     }
-    
-
   });
   
   
@@ -330,12 +345,15 @@ function allotment(prof, ta) {
 
   for(const m of matching){
       jsonformated.push({
-          "courseCode":m.courseCode.toUpperCase().toString(),
-          "expertTa":m.expertTa.toString().toUpperCase()
+          "courseCode":m.courseCode.toString().toUpperCase(),
+          "courseName":m.courseName.toString().toUpperCase(),
+          "Instructor":m.instructor.toString().toUpperCase(),
+          "expertTa":m.expertTa.toString().toUpperCase(),
           // "traineeTa":m.traineeTa.toString().toUpperCase()
       });
   }
 
+  console.log("jsonformated",jsonformated);
 
     return jsonformated;
     // return matching;
@@ -350,121 +368,190 @@ module.exports = allotment;
 
 
 
-//   const prof = [
-//     {
-//     //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
-//       courseCode: 'eel1010',
-//       ugPg: 'ug',
-//       electiveCore: 'core',
-//       needToAttend: 0,
-//       nof: 123,
-//       theoryLab: 'theory',
-//       cgpa: 8,
-//       courseGrade: 'a-',
-//       taRollNumber1: 'b20',
-//       taRollNumber2: 'b20cs0111',
-//       taRollNumber3: 'b20ee0124',
-//       __v: 0
-//     },
-//     {
-//     //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
-//       courseCode: 'csl1010',
-//       ugPg: 'ug',
-//       electiveCore: 'core',
-//       needToAttend: 0,
-//       nof: 123,
-//       theoryLab: 'theory',
-//       cgpa: 8,
-//       courseGrade: 'a',
-//       taRollNumber1: 'b20ee011',
-//       taRollNumber2: 'b20cs010',
-//       taRollNumber3: 'b30cs000',
-//       __v: 0
-//     }
-//   ];
-  
+// const prof =[
+//   {
+//     courseCode: 'eel1010',
+//     courseName: 'design credit ee',
+//     instructorName: 'ashish',
+//     ugPg: 'ug',
+//     electiveCore: 'core',
+//     needToAttend: 0,
+//     noOfStudents: 123,
+//     theoryLab: 'theory',
+//     courseGrade: 'a',
+//     taRollNumber1: 'b20ee011',
+//     taRollNumber2: 'b20ee111',
+//     taRollNumber3: 'b20ee123'
+//   },
+//   {
+//     courseCode: 'csl1010',
+//     courseName: 'design credit cs',
+//     instructorName: 'kumar',
+//     ugPg: 'ug',
+//     electiveCore: 'core',
+//     needToAttend: 0,
+//     noOfStudents: 140,
+//     theoryLab: 'lab',
+//     courseGrade: 'a',
+//     taRollNumber1: 'b20cs011',
+//     taRollNumber2: 'b20cs111',
+//     taRollNumber3: 'b20cs123'
+//   }
+// ];
 
-//   const ta = [
-//     {
-//     //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
-//       rollNumber: 'm21ee011',
-//       cgpa: 9,
-//       pref1: 'eel1010',
-//       course_grade_pref_1: 'a-',
-//       pref2: 'eel1020',
-//       course_grade_pref_2: 'a',
-//       pref3: 'eel1030',
-//       course_grade_pref_3: 'a-',
-//       __v: 0
-//     },
-//     {
-//     //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-//         rollNumber: 'b20ee0124',
-//         cgpa: 9,
-//         pref1: 'eel1030',
-//         course_grade_pref_1: 'a',
-//         pref2: 'eel1020',
-//         course_grade_pref_2: 'a',
-//         pref3: 'eel1010',
-//         course_grade_pref_3: 'a-',
-//         __v: 0
-//     },
-//     {
-//     //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-        
-//         rollNumber: 'b20ee0125',
-//         cgpa: 9,
-//         pref1: 'eel1010',
-//         course_grade_pref_1: 'a',
-//         pref2: 'eel1020',
-//         course_grade_pref_2: 'a',
-//         pref3: 'eel1030',
-//         course_grade_pref_3: 'a-',
-//         __v: 0
-//     },
-//     {
-//     //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-//     rollNumber: 'b20ee0126',
-//     cgpa: 9,
+// const ta =[
+//   {
+//     rollNumber: 'eel1010',
 //     pref1: 'eel1010',
 //     course_grade_pref_1: 'a',
 //     pref2: 'eel1020',
 //     course_grade_pref_2: 'a',
 //     pref3: 'eel1030',
-//     course_grade_pref_3: 'a-',
-//     __v: 0
-//     },
-//     {
-//     //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-//     rollNumber: 'b20ee0127',
-//     cgpa: 9,
+//     course_grade_pref_3: 'a'
+//   },
+//   {
+//     rollNumber: 'b20cs011',
 //     pref1: 'csl1010',
 //     course_grade_pref_1: 'a',
-//     pref2: 'eel1020',
+//     pref2: 'csl1020',
 //     course_grade_pref_2: 'a',
-//     pref3: 'eel1030',
-//     course_grade_pref_3: 'a-',
-//     __v: 0 
-//     },
-//     {
-//     //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-//     rollNumber: 'b20cs0111',
-//     cgpa: 9,
-//     pref1: 'eel1010',
-//     course_grade_pref_1: 'a',
-//     pref2: 'csl1010',
-//     course_grade_pref_2: 'a',
-//     pref3: 'eel1030',
-//     course_grade_pref_3: 'a-',
-//     __v: 0
-//     },
+//     pref3: 'csl1030',
+//     course_grade_pref_3: 'a'
+//   }
+// ]
+
+// result=allotment(prof,ta);
+// console.log("----------------",result);
 
 
-//   ];
 
 
-//   result=allotment(prof,ta);
-//   console.log(result);
+
+  const prof = [
+    {
+    //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
+      courseCode: 'eel1010',
+      courseName: 'design credit ee',
+      instructorName: 'ashish',
+      ugPg: 'ug',
+      electiveCore: 'core',
+      needToAttend: 0,
+      nof: 123,
+      theoryLab: 'theory',
+      cgpa: 8,
+      courseGrade: 'a-',
+      // taRollNumber1: 'b20',
+      // taRollNumber2: 'b20cs0111',
+      // taRollNumber3: 'b20ee0124',
+      taRollNumber1: 'b20ee011',
+      taRollNumber2: 'b20ee111',
+      taRollNumber3: 'b20ee123',
+      __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
+      courseCode: 'csl1010',
+      ugPg: 'ug',
+      courseName: 'design credit cs',
+      instructorName: 'kumar',
+      electiveCore: 'core',
+      needToAttend: 0,
+      nof: 123,
+      theoryLab: 'theory',
+      cgpa: 8,
+      courseGrade: 'a',
+      // taRollNumber1: 'b20ee011',
+      // taRollNumber2: 'b20cs010',
+      // taRollNumber3: 'b30cs000',
+      taRollNumber1: 'b20cs011',
+      taRollNumber2: 'b20cs111',
+      taRollNumber3: 'b20cs123',
+      __v: 0
+    }
+  ];
+  
+
+  const ta = [
+    {
+    //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
+      rollNumber: 'b20ee011',
+      cgpa: 9,
+      pref1: 'eel1010',
+      course_grade_pref_1: 'a-',
+      pref2: 'eel1020',
+      course_grade_pref_2: 'a',
+      pref3: 'eel1030',
+      course_grade_pref_3: 'a-',
+      __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+        rollNumber: 'b20cs011',
+        cgpa: 9,
+        pref1: 'csl1010',
+        course_grade_pref_1: 'a',
+        pref2: 'csl1020',
+        course_grade_pref_2: 'a',
+        pref3: 'eel1030',
+        course_grade_pref_3: 'a-',
+        __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+        
+        rollNumber: 'b20ee0125',
+        cgpa: 9,
+        pref1: 'eel1010',
+        course_grade_pref_1: 'a',
+        pref2: 'eel1020',
+        course_grade_pref_2: 'a',
+        pref3: 'eel1030',
+        course_grade_pref_3: 'a-',
+        __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+    rollNumber: 'b20ee0126',
+    cgpa: 9,
+    pref1: 'eel1010',
+    course_grade_pref_1: 'a',
+    pref2: 'eel1020',
+    course_grade_pref_2: 'a',
+    pref3: 'eel1030',
+    course_grade_pref_3: 'a-',
+    __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+    rollNumber: 'b20ee0127',
+    cgpa: 9,
+    pref1: 'csl1010',
+    course_grade_pref_1: 'a',
+    pref2: 'eel1020',
+    course_grade_pref_2: 'a',
+    pref3: 'eel1030',
+    course_grade_pref_3: 'a-',
+    __v: 0 
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+    rollNumber: 'b20cs111',
+    cgpa: 9,
+    pref1: 'eel1010',
+    course_grade_pref_1: 'b',
+    pref2: 'csl1010',
+    course_grade_pref_2: 'a',
+    pref3: 'eel1030',
+    course_grade_pref_3: 'a-',
+    __v: 0
+    },
+
+
+  ];
+
+
+  result=allotment(prof,ta);
+  console.log(result);
 
 // const XLSX = require('xlsx');
 

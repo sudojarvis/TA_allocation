@@ -7,6 +7,8 @@ facultyForm.addEventListener("submit", function (e) {
     e.preventDefault();
     
     var coursCode = document.querySelector("#coursecode").value;
+    var courseName = document.querySelector("#coursename").value;
+    var instructorName = document.querySelector("#instructorname").value;
     var ugPg = document.querySelector("#ugpg").value;
     var electiveCore = document.querySelector("#elective").value;
     var needToAttend = document.querySelector("#needto").value;
@@ -42,6 +44,8 @@ facultyForm.addEventListener("submit", function (e) {
 
                     var data = {
                         "courseCode": coursCode,
+                        "courseName": courseName,
+                        "instructorName": instructorName,
                         "ugPg": ugPg,
                         "electiveCore": electiveCore,
                         "needToAttend": needToAttend,

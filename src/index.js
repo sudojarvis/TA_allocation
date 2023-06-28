@@ -188,6 +188,8 @@ app.get("/showdata", async (req, res) => {
 	for (var i = 0; i < prof.length; i++) {
 		var obj1 = {};
 		obj1["courseCode"] = prof[i].courseCode;
+		obj1["courseName"] = prof[i].courseName;
+		obj1["instructorName"] = prof[i].instructorName;
 		obj1["ugPg"] = prof[i].ugPg;
 		obj1["electiveCore"] = prof[i].electiveCore;
 		obj1["needToAttend"] = prof[i].needToAttend;
@@ -234,18 +236,36 @@ app.get("/result", async (req, res) => {
   
 	  // Set headers
 	  worksheet.getCell(1, 1).value = 'course Code';
-	  worksheet.getCell(1, 2).value = 'ExpertTa';
-  
-	  // Split the values and assign them to separate columns
+	//   worksheet.getCell(1, 2).value = 'ExpertTa';
+	  worksheet.getCell(1, 2).value = 'Course Name';
+	  worksheet.getCell(1, 3).value = 'Instructor Name';
+	  worksheet.getCell(1, 4).value = 'Ta Alloted';
+
 	  data.forEach((item, index) => {
+
 		worksheet.getCell(index + 2, 1).value = item.courseCode;
-  
+		worksheet.getCell(index + 2, 2).value = item.courseName;
+		worksheet.getCell(index + 2, 3).value = item.Instructor;
+		// worksheet.getCell(index + 2, 4).value = item.expertTa;
 		const values = item.expertTa.split(',');
-  
+
 		values.forEach((value, columnIndex) => {
-		  worksheet.getCell(index + 2, columnIndex + 2).value = value;
+			worksheet.getCell(index + 2, columnIndex + 4).value = value;
 		});
-	  });
+
+	});
+
+  
+	// Split the values and assign them to separate columns
+	//   data.forEach((item, index) => {
+	// 	worksheet.getCell(index + 2, 1).value = item.courseCode;
+  
+	// 	const values = item.expertTa.split(',');
+  
+	// 	values.forEach((value, columnIndex) => {
+	// 	  worksheet.getCell(index + 2, columnIndex + 2).value = value;
+	// 	});
+	//   });
   
 	  // Save the workbook
 	  await workbook.xlsx.writeFile('allotment.xlsx');
@@ -330,19 +350,40 @@ app.get("/download-file", async (req, res) => {
 	  const worksheet = workbook.addWorksheet('Sheet1');
   
 	  // Set headers
-	  worksheet.getCell(1, 1).value = 'course Code';
-	  worksheet.getCell(1, 2).value = 'ExpertTa';
+	//   worksheet.getCell(1, 1).value = 'course Code';
+	//   worksheet.getCell(1, 2).value = 'ExpertTa';
   
-	  // Split the values and assign them to separate columns
+	//   // Split the values and assign them to separate columns
+	//   data.forEach((item, index) => {
+	// 	worksheet.getCell(index + 2, 1).value = item.courseCode;
+  
+	// 	const values = item.expertTa.split(',');
+  
+	// 	values.forEach((value, columnIndex) => {
+	// 	  worksheet.getCell(index + 2, columnIndex + 2).value = value;
+	// 	});
+	//   });
+
+	worksheet.getCell(1, 1).value = 'course Code';
+	//   worksheet.getCell(1, 2).value = 'ExpertTa';
+	  worksheet.getCell(1, 2).value = 'Course Name';
+	  worksheet.getCell(1, 3).value = 'Instructor Name';
+	  worksheet.getCell(1, 4).value = 'Ta Alloted';
+
 	  data.forEach((item, index) => {
+
 		worksheet.getCell(index + 2, 1).value = item.courseCode;
-  
+		worksheet.getCell(index + 2, 2).value = item.courseName;
+		worksheet.getCell(index + 2, 3).value = item.Instructor;
+		// worksheet.getCell(index + 2, 4).value = item.expertTa;
 		const values = item.expertTa.split(',');
-  
+
 		values.forEach((value, columnIndex) => {
-		  worksheet.getCell(index + 2, columnIndex + 2).value = value;
+			worksheet.getCell(index + 2, columnIndex + 4).value = value;
 		});
-	  });
+
+	});
+	
   
 	  // Save the workbook
 	  const filePath = './allotment.xlsx';

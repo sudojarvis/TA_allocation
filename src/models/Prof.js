@@ -11,6 +11,18 @@ const profSchema = mongoose.Schema({
         lowercase : true,
         required : true
     },
+    courseName : {
+        type : String,
+        trim : true,
+        lowercase : true,
+        required : true
+    },
+    instructorName : {
+        type : String,
+        trim : true,
+        lowercase : true,
+        required : true
+    },
     ugPg : {
         type : String, 
         trim : true,
