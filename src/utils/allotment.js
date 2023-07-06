@@ -156,7 +156,7 @@ function allotment(prof, ta) {
     const temp = [...ta1_, ...ta2_, ...ta3_]; /// combining all the ta with same course code as professor
 
     temp.sort((a, b) => b.cgpa - a.cgpa); // sorting the ta in descending order of cgpa
-    console.log("temp",temp);
+    // console.log("temp",temp);
     // let i = 0;
     // console.log("temp before",temp);
 
