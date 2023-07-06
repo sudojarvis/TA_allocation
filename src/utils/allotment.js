@@ -156,7 +156,7 @@ function allotment(prof, ta) {
     const temp = [...ta1_, ...ta2_, ...ta3_]; /// combining all the ta with same course code as professor
 
     temp.sort((a, b) => b.cgpa - a.cgpa); // sorting the ta in descending order of cgpa
-    // console.log("temp",temp);
+    console.log("temp",temp);
     // let i = 0;
     // console.log("temp before",temp);
 
@@ -352,35 +352,34 @@ function allotment(prof, ta) {
     // and assigning them to professor if they are not assigned to any professor
     // and if no of ta required is 0 then break
 
-    if(noOfTaRequired>0){
-      const allTa_0=tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode===ta.preferences[0].courseCode && checkCourseGrade(ta.preferences[0].courseGrade,professor.courseGrade));
-      const allTa_1=tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode===ta.preferences[1].courseCode && checkCourseGrade(ta.preferences[1].courseGrade,professor.courseGrade));
-      const allTa_2=tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode===ta.preferences[2].courseCode && checkCourseGrade(ta.preferences[2].courseGrade,professor.courseGrade));
-      const allTa=[...allTa_0,...allTa_1,...allTa_2];
-      allTa.sort((a, b) => {b.cgpa - a.cgpa});
+    if (noOfTaRequired > 0) {
+      const allTa_0 = tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode === ta.preferences[0].courseCode && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade));
+      const allTa_1 = tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode === ta.preferences[1].courseCode && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade));
+      const allTa_2 = tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode === ta.preferences[2].courseCode && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade));
+      const allTa = [...allTa_0, ...allTa_1, ...allTa_2];
+      allTa.sort((a, b) => b.cgpa - a.cgpa);
+      // allTa.sort((a, b) => a.cgpa - b.cgpa);
       sortOnGrade(allTa);
-      for(var k=0;k<allTa.length;k++){
-        // matching.find(m => m.courseCode === professor.courseCode).expertTa.push(allTa[k].rollNumber);
-
-        const matchingCourse = matching.find(m=>m.courseCode === professor.courseCode);
-        if(matchingCourse && (!matchingCourse.expertTa || !matchingCourse.expertTa.includes(allTa[k].rollNumber))){
+    
+      for (var k = 0; k < allTa.length; k++) {
+        const matchingCourse = matching.find(m => m.courseCode === professor.courseCode);
+        if (matchingCourse && (!matchingCourse.expertTa || !matchingCourse.expertTa.includes(allTa[k].rollNumber))) {
           matchingCourse.expertTa.push(allTa[k].rollNumber);
-
-          if(allTa[k].upperCap>0){
+    
+          if (allTa[k].upperCap > 0) {
             allTa[k].upperCap--;
           }
-          if(allTa[k].upperCap===0){
-            taAssigned[allTa[k].rollNumber]=true;
+          if (allTa[k].upperCap === 0) {
+            taAssigned[allTa[k].rollNumber] = true;
           }
-
+    
           noOfTaRequired--;
-          if(noOfTaRequired===0){
+          if (noOfTaRequired === 0) {
             break;
           }
         }
-
       }
-    }
+    }    
 
     //////////////////////////////////////////////////////////////////////////////////
   });
@@ -472,131 +471,131 @@ module.exports = allotment;
 
 
 
-  const prof = [
-    {
-    //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
-      courseCode: 'eel1010',
-      courseName: 'design credit ee',
-      instructorName: 'ashish',
-      ugPg: 'ug',
-      electiveCore: 'core',
-      needToAttend: 0,
-      nof: 123,
-      theoryLab: 'theory',
-      cgpa: 8,
-      courseGrade: 'a-',
-      // taRollNumber1: 'b20',
-      // taRollNumber2: 'b20cs0111',
-      // taRollNumber3: 'b20ee0124',
-      taRollNumber1: 'b20ee011',
-      taRollNumber2: 'b20cs011',
-      taRollNumber3: 'b20ee123',
-      __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
-      courseCode: 'csl1010',
-      ugPg: 'ug',
-      courseName: 'design credit cs',
-      instructorName: 'kumar',
-      electiveCore: 'core',
-      needToAttend: 0,
-      nof: 123,
-      theoryLab: 'theory',
-      cgpa: 8,
-      courseGrade: 'a',
-      // taRollNumber1: 'b20ee011',
-      // taRollNumber2: 'b20cs010',
-      // taRollNumber3: 'b30cs000',
-      taRollNumber1: 'b20cs011',
-      taRollNumber2: 'b20cs111',
-      taRollNumber3: 'b20cs123',
-      __v: 0
-    }
-  ];
+  // const prof = [
+  //   {
+  //   //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
+  //     courseCode: 'eel1010',
+  //     courseName: 'design credit ee',
+  //     instructorName: 'ashish',
+  //     ugPg: 'ug',
+  //     electiveCore: 'core',
+  //     needToAttend: 0,
+  //     nof: 123,
+  //     theoryLab: 'theory',
+  //     cgpa: 8,
+  //     courseGrade: 'a-',
+  //     // taRollNumber1: 'b20',
+  //     // taRollNumber2: 'b20cs0111',
+  //     // taRollNumber3: 'b20ee0124',
+  //     taRollNumber1: 'b20ee011',
+  //     taRollNumber2: 'b20cs011',
+  //     taRollNumber3: 'b20ee123',
+  //     __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
+  //     courseCode: 'csl1010',
+  //     ugPg: 'ug',
+  //     courseName: 'design credit cs',
+  //     instructorName: 'kumar',
+  //     electiveCore: 'core',
+  //     needToAttend: 0,
+  //     nof: 123,
+  //     theoryLab: 'theory',
+  //     cgpa: 8,
+  //     courseGrade: 'a',
+  //     // taRollNumber1: 'b20ee011',
+  //     // taRollNumber2: 'b20cs010',
+  //     // taRollNumber3: 'b30cs000',
+  //     taRollNumber1: 'b20cs011',
+  //     taRollNumber2: 'b20cs111',
+  //     taRollNumber3: 'b20cs123',
+  //     __v: 0
+  //   }
+  // ];
   
 
-  const ta = [
-    {
-    //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
-      rollNumber: 'b20ee011',
-      cgpa: 9,
-      pref1: 'eel1010',
-      course_grade_pref_1: 'a-',
-      pref2: 'eel1020',
-      course_grade_pref_2: 'a',
-      pref3: 'eel1030',
-      course_grade_pref_3: 'a-',
-      __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-        rollNumber: 'b20cs011',
-        cgpa: 9,
-        pref1: 'csl1010',
-        course_grade_pref_1: 'a',
-        pref2: 'eel1010',
-        course_grade_pref_2: 'a',
-        pref3: 'eel1030',
-        course_grade_pref_3: 'a-',
-        __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  // const ta = [
+  //   {
+  //   //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
+  //     rollNumber: 'b20ee011',
+  //     cgpa: 9,
+  //     pref1: 'eel1010',
+  //     course_grade_pref_1: 'a-',
+  //     pref2: 'eel1020',
+  //     course_grade_pref_2: 'a',
+  //     pref3: 'eel1030',
+  //     course_grade_pref_3: 'a-',
+  //     __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  //       rollNumber: 'b20cs011',
+  //       cgpa: 9,
+  //       pref1: 'csl1010',
+  //       course_grade_pref_1: 'a',
+  //       pref2: 'eel1010',
+  //       course_grade_pref_2: 'a',
+  //       pref3: 'eel1030',
+  //       course_grade_pref_3: 'a-',
+  //       __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
         
-        rollNumber: 'b20ee0125',
-        cgpa: 9,
-        pref1: 'eel1010',
-        course_grade_pref_1: 'a',
-        pref2: 'eel1020',
-        course_grade_pref_2: 'a',
-        pref3: 'eel1030',
-        course_grade_pref_3: 'a-',
-        __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-    rollNumber: 'b20ee0126',
-    cgpa: 9,
-    pref1: 'eel1010',
-    course_grade_pref_1: 'a',
-    pref2: 'eel1020',
-    course_grade_pref_2: 'a',
-    pref3: 'eel1030',
-    course_grade_pref_3: 'a-',
-    __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-    rollNumber: 'b20ee0127',
-    cgpa: 9,
-    pref1: 'csl1010',
-    course_grade_pref_1: 'a',
-    pref2: 'eel1020',
-    course_grade_pref_2: 'a',
-    pref3: 'eel1030',
-    course_grade_pref_3: 'a-',
-    __v: 0 
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-    rollNumber: 'b20cs111',
-    cgpa: 9,
-    pref1: 'eel1010',
-    course_grade_pref_1: 'b',
-    pref2: 'csl1010',
-    course_grade_pref_2: 'a',
-    pref3: 'eel1030',
-    course_grade_pref_3: 'a-',
-    __v: 0
-    },
+  //       rollNumber: 'b20ee0125',
+  //       cgpa: 9,
+  //       pref1: 'eel1010',
+  //       course_grade_pref_1: 'a',
+  //       pref2: 'eel1020',
+  //       course_grade_pref_2: 'a',
+  //       pref3: 'eel1030',
+  //       course_grade_pref_3: 'a-',
+  //       __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  //   rollNumber: 'b20ee0126',
+  //   cgpa: 9,
+  //   pref1: 'eel1010',
+  //   course_grade_pref_1: 'a',
+  //   pref2: 'eel1020',
+  //   course_grade_pref_2: 'a',
+  //   pref3: 'eel1030',
+  //   course_grade_pref_3: 'a-',
+  //   __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  //   rollNumber: 'b20ee0127',
+  //   cgpa: 9,
+  //   pref1: 'csl1010',
+  //   course_grade_pref_1: 'a',
+  //   pref2: 'eel1020',
+  //   course_grade_pref_2: 'a',
+  //   pref3: 'eel1030',
+  //   course_grade_pref_3: 'a-',
+  //   __v: 0 
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  //   rollNumber: 'b20cs111',
+  //   cgpa: 9,
+  //   pref1: 'eel1010',
+  //   course_grade_pref_1: 'b',
+  //   pref2: 'csl1010',
+  //   course_grade_pref_2: 'a',
+  //   pref3: 'eel1030',
+  //   course_grade_pref_3: 'a-',
+  //   __v: 0
+  //   },
 
 
-  ];
+  // ];
 
 
-  result=allotment(prof,ta);
-  console.log(result);
+  // result=allotment(prof,ta);
+  // console.log(result);
 
 // const XLSX = require('xlsx');
 
