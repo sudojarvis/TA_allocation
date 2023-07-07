@@ -9,67 +9,38 @@ function allotment(prof, ta) {
     const taAssigned = {};
 
 
-  //function to check if ta course grade is greater than or equal to professor course grade
-  function checkCourseGrade(a, b) {
-    const courseGrade = ['f', 'e-', 'e', 'd-', 'd', 'c-', 'c', 'b-', 'b', 'a-', 'a'];
-    if (courseGrade.indexOf(a) >= courseGrade.indexOf(b)) {
-      return true;
-    } else {
-      return false;
+    function checkCourseGrade(a, b) {
+      const courseGrade = ['f', 'e-', 'e', 'd-', 'd', 'c-', 'c', 'b-', 'b', 'a-', 'a'];
+      if (courseGrade.indexOf(a) >= courseGrade.indexOf(b)) {
+        return true;
+      } else {
+        return false;
+      }
     }
-  }
-  //////////////////////////////////////////////////////////////
 
-  // below  within the same cgpa , sort ta according to course grade
-  function sortOnGrade(temp) {
-    let i = 0;
-    while (i < temp.length) {
-        const currentCGPA = temp[i].cgpa;
-        let j = i + 1;
-        while (j < temp.length && temp[j].cgpa === currentCGPA) {
-            j++;
-        }
+    function sortOnGrade(temp) {
+      let i = 0;
+      while (i < temp.length) {
+          const currentCGPA = temp[i].cgpa;
+          let j = i + 1;
+          while (j < temp.length && temp[j].cgpa === currentCGPA) {
+              j++;
+          }
 
-        const temp1 = temp.slice(i, j);
-        temp1.sort((a, b) => {
-            const courseGradeOrder = ['f', 'e-', 'e', 'd-', 'd', 'c-', 'c', 'b-', 'b', 'a-', 'a'];
-            return courseGradeOrder.indexOf(b.courseGrade) - courseGradeOrder.indexOf(a.courseGrade);
-        });
+          const temp1 = temp.slice(i, j);
+          temp1.sort((a, b) => {
+              const courseGradeOrder = ['f', 'e-', 'e', 'd-', 'd', 'c-', 'c', 'b-', 'b', 'a-', 'a'];
+              return courseGradeOrder.indexOf(b.courseGrade) - courseGradeOrder.indexOf(a.courseGrade);
+          });
 
-        temp.splice(i, temp1.length, ...temp1);
-        i = j;
+          temp.splice(i, temp1.length, ...temp1);
+          i = j;
+      }
     }
-  }
 
-  //////////////////////////////////////////////////////////////
-
-
-  // return true if any ta has opted for the course
-  // this function is used in findProfessorByTARollNumber
-  function courseChosenByTa(taRollNumber,tas,courseCode){
-    const ta = tas.find(ta => ta.rollNumber === taRollNumber);
-    if(ta){
-      return ta.preferences.some(preference => preference.courseCode === courseCode);
-
-    }
-    return false;
-  }
-  ///////////////////////////////////////////////////////////////
-
-  // this filter ta if other professor opt for same ta for different courses and also ta also opt for same course
-
-  function findProfessorByTARollNumber(professors, taRollNumber, excludedProfessor) {
-    return professors.filter(professor => professor.courseCode !== excludedProfessor && courseChosenByTa(taRollNumber,tas,professor.courseCode));
-  }
-  ///////////////////////////////////////////////////////////////
-
-
-    // reformating the professor and ta data
     const professors = prof.map(p => ({
       courseCode: p.courseCode,
-      // preferences: [p.taRollNumber1, p.taRollNumber2, p.taRollNumber3],
-      preferences: [{rollNumber:p.taRollNumber1,weight:3},{rollNumber:p.taRollNumber2,weight:2},{rollNumber:p.taRollNumber3,weight:1}],
-    //   branch: p.branch,
+      preferences: [p.taRollNumber1, p.taRollNumber2, p.taRollNumber3],
       theoryLab: p.theoryLab,
       noOfStudents: p.nof,
       cgpa: p.cgpa,
@@ -78,310 +49,235 @@ function allotment(prof, ta) {
       courseName: p.courseName,
       // weigth: prof.indexOf(p)+1
     }));
-    // console.log("professors",professors);
-
-    // console.log("professors",professors);
 
     const tas = ta.map(t => ({
       rollNumber: t.rollNumber,
       preferences: [
-        {courseCode: t.pref1, courseGrade: t.course_grade_pref_1,weight:3},
-        {courseCode: t.pref2, courseGrade: t.course_grade_pref_2,weight:2},
-        {courseCode: t.pref3, courseGrade: t.course_grade_pref_3,weight:1}
+        { courseCode: t.pref1, courseGrade: t.course_grade_pref_1 },
+        { courseCode: t.pref2, courseGrade: t.course_grade_pref_2 },
+        { courseCode: t.pref3, courseGrade: t.course_grade_pref_3 }
       ],
       cgpa: t.cgpa,
-      upperCap: 4,
-    }));
-
-    ////////////////////////////////////////////////////////////////////
+      upperCap:4,
+    })
+    );
 
   
-  professors.forEach(professor => {   /// iterating over all the professors
-    const studentPerTA = professor.theoryLab === "theory" ? 30 : 15;  // 30 for theory and 15 for lab
 
-    var noOfTaRequired = Math.ceil(professor.noOfStudents / studentPerTA);  // no of ta required for a professor
-    // console.log("noOfTaRequired",noOfTaRequired);
-    // matching.push({ courseCode: professor.courseCode, expertTa: [] });
-    matching.push({ courseCode: professor.courseCode, instructor: professor.instructor, courseName: professor.courseName, expertTa: [] }); // adding course code and instructor name to matching array
+    var presentYear = new Date().getFullYear();
+    lastTwoDigits = presentYear%100;
 
-    //filtering ta with same course code as professor
-    const taWithSameCourse = tas.filter(ta =>
-        ta.preferences.some(preference => preference.courseCode === professor.courseCode)
-    );
-    ///////////////////////////////////////////////////////////////////
-   
+    const arrOfyears = [];
 
-    // ta1 stores ta with same course code as professor and first preference as professor course code
-    // ta2 stores ta with same course code as professor and second preference as professor course code
-    // ta3 stores ta with same course code as professor and third preference as professor course code
-    const ta1 = taWithSameCourse.filter(ta => ta.preferences[0].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade));
-    const ta2 = taWithSameCourse.filter(ta => ta.preferences[1].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade));
-    const ta3 = taWithSameCourse.filter(ta => ta.preferences[2].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade));
-    /////////////////////////////////////////////////////////////////////////
+    for(let i=-5;i<=5;i++){
+      arrOfyears.push(lastTwoDigits+i);
+    }
+
+    const tempArrBt=arrOfyears.map((num)=>'b'+num); // creating an array of batch tag for btech
+    const tempArrMt=arrOfyears.map((num)=>'m'+num); // creating an array of batch tag for mtech
+    const tempArrPh=arrOfyears.map((num)=>'p'+num); // creating an array of batch tag for phd
+
+    const pgBatchTag = [...tempArrMt,...tempArrPh]; // creating an array of batch tag for pg
+    const ugBatchTag = [...tempArrBt]; // creating an array of batch tag for ug
+
+    const ugTas = tas.filter(ta => ugBatchTag.includes(ta.rollNumber.slice(0, 3)));
+    const pgTas = tas.filter(ta => pgBatchTag.includes(ta.rollNumber.slice(0, 3)));
+
+    // console.log(ugTas);
+    // console.log(pgTas);
+
+    professors.forEach(professor => {
+      const studentPerTA = professor.theoryLab === "theory" ? 30 : 15;  // 30 for theory and 15 for lab
+      var noOftasRequired = Math.ceil(professor.noOfStudents / studentPerTA);
+
+      matching.push({
+        courseCode: professor.courseCode,
+        instructor: professor.instructor,
+        courseName: professor.courseName,
+        expertTa: [],
+      });
+
     
-    // reformating the filtered ta
-    const ta1_=[];
-    for(const ta of ta1){
-        ta1_.push({
-        rollNumber: ta.rollNumber,
-        cgpa: ta.cgpa,
-        courseGrade: ta.preferences[0].courseGrade,
-        weight: ta.preferences[0].weight,
-        upperCap: ta.upperCap,
-    })
-    }
-    const ta2_=[];
 
-    for(const ta of ta2){
-        ta1_.push({
-        rollNumber: ta.rollNumber,
-        cgpa: ta.cgpa,
-        courseGrade: ta.preferences[1].courseGrade,
-        weight: ta.preferences[1].weight,
-        upperCap: ta.upperCap,
-    })
-    }
-    const ta3_=[];
-    for (const ta of ta3) {
-        ta1_.push({
-        rollNumber: ta.rollNumber,
-        cgpa: ta.cgpa,
-        courseGrade: ta.preferences[2].courseGrade,
-        weight: ta.preferences[2].weight,
-        upperCap: ta.upperCap,
-        });
-    }
-    /////////////////////////////////////////////////////////////////////////
+      for (var profTaRollNumber of professor.preferences) {
+        var batchTag = false;
+        if (ugBatchTag.includes(profTaRollNumber) || pgBatchTag.includes(profTaRollNumber)) {
+          batchTag = true;
+        }
+      
+        if (batchTag) {
 
-    const temp = [...ta1_, ...ta2_, ...ta3_]; /// combining all the ta with same course code as professor
+          // console.log(batchTag);
 
-    temp.sort((a, b) => b.cgpa - a.cgpa); // sorting the ta in descending order of cgpa
-    // console.log("temp",temp);
-    // let i = 0;
-    // console.log("temp before",temp);
+          if (pgBatchTag.includes(profTaRollNumber)) {
+            // console.log(pgBatchTag.includes(profTaRollNumber));
+            var tempTa = pgTas.filter(ta => ta.rollNumber.slice(0, 3) === profTaRollNumber);
+            var taPref1 = tempTa.filter(ta => ta.preferences[0].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
+            var taPref2 = tempTa.filter(ta => ta.preferences[1].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
+            var taPref3 = tempTa.filter(ta => ta.preferences[2].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
+            var taPref = [...taPref1, ...taPref2, ...taPref3];
+            if(taPref.length===0){
+              continue;
+            }
+            matching.find(m => m.courseCode === professor.courseCode).expertTa.push(taPref[0].rollNumber);
+            noOftasRequired--;
+            // console.log("temta",tempTa);
+            // console.log("taPref", taPref);
 
-    sortOnGrade(temp);  // sorting the ta on the basis of course grade
+          }
+          else if (ugBatchTag.includes(profTaRollNumber)) {
+            // console.log(ugBatchTag.includes(profTaRollNumber));
+            var tempTa = ugTas.filter(ta => ta.rollNumber.slice(0, 3) === profTaRollNumber);
+            // console.log("tempTa", tempTa);
+            var taPref1 = tempTa.filter(ta => ta.preferences[0].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1 && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade));
+            // console.log("taPref1", taPref1);
+            var taPref2 = tempTa.filter(ta => ta.preferences[1].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1 && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade));
+            // console.log("taPref2", taPref2);
+            var taPref3 = tempTa.filter(ta => ta.preferences[2].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1 && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade));
+            // console.log("taPref3", taPref3);
+            // var taPref = [...taPref1, ...taPref2, ...taPref3];
 
-    ////////////////////////////////////////////////////////
-    // creating the batch tag for ta
-    presentYear=new Date().getFullYear();
-    lastTwoDigitOfYr=presentYear%100;  // last two digit of year
-    const arrOfYear=[];
-    /// creating an array of last two digit of year and last two digit of year +2,+1,-1,-2,-3,-4
-    for( var k =-4;k<=2;k++){
-        arrOfYear.push(lastTwoDigitOfYr+k);
-    }
-
-    const tempArrBt=arrOfYear.map((num)=>'b'+num); // creating an array of batch tag for btech
-    const tempArrMt=arrOfYear.map((num)=>'m'+num); // creating an array of batch tag for mtech
-    const tempArrPh=arrOfYear.map((num)=>'p'+num); // creating an array of batch tag for phd
-
-    const arrOfBatch=[...tempArrBt,...tempArrMt,...tempArrPh];  // combining all the batch tag
-
-
-    for(const profTaRollNumber of professor.preferences){ // iterating over all the ta in professor preference
-
-      const batchTag= arrOfBatch.includes(profTaRollNumber.rollNumber); // checking if the professor preference contains batch tag
-
-      // console.log("batchTag",batchTag);
-      // x= findProfessorByTARollNumber(professors,ta.rollNumber,professor.courseCode);
-      if(!batchTag){  // if professor preference does not contain batch tag
-
-        for( const ta of temp){   // iterating over all the ta with same course code as professor and sorted on cgpa and course grade (temp)
-          if(!taAssigned[ta.rollNumber]){ // if ta is not assigned to any professor
-
-            x= findProfessorByTARollNumber(professors,ta.rollNumber,professor.courseCode); // finding the other professor who has ta in his preference
-            
-            var chekWeight= true;
-
-            ///////////////////////////////////////////////////////////
-            /// checking if the ta is assigned to other professor and if the weight of ta in other professor preference is greater than the weight of ta in current professor preference
-
-            if(x!==undefined && !taAssigned[ta.rollNumber]){
-              x.forEach((pref)=>{
-                pref.preferences.forEach((p)=>{
-                  // console.log("p",p,"profTaRollNumber",profTaRollNumber,"weight",profTaRollNumber.weight);
-                  if(p.rollNumber===ta.rollNumber && p.weight>profTaRollNumber.weight){
-                    chekWeight=false;
-                  }
-                })
+            var tempTA0= [];
+            var tempTA1= [];
+            var tempTA2= [];
+            for(var ta of taPref1){
+              tempTA0.push({
+                rollNumber:ta.rollNumber,
+                cgpa:ta.cgpa,
+                courseCode:ta.preferences[0].courseCode,
+                courseGrade:ta.preferences[0].courseGrade
               })
             }
-            ///////////////////////////////////////////////////////////
 
-
-            
-            if(ta.rollNumber === profTaRollNumber.rollNumber && noOfTaRequired>0 && (profTaRollNumber.weight>= ta.weight||ta.weight>=profTaRollNumber.weight) ){//&& chekWeight){ // if ta is same as professor preference and weight of ta is greater than or equal to weight of professor preference or vice versa
-              
-              // matching.find(m => m.courseCode === professor.courseCode).expertTa.push(profTaRollNumber.rollNumber);
-             
-              const matchingCourse = matching.find(m => m.courseCode === professor.courseCode); // finding the course in matching array
-              
-              if(matchingCourse && !matchingCourse.expertTa || !matchingCourse.expertTa.includes(profTaRollNumber.rollNumber)){ // if the course is not present in matching array or ta is not present in expertTa array of course
-                matchingCourse.expertTa.push(profTaRollNumber.rollNumber);
-                if(ta.upperCap>0){  // if ta has upper cap
-
-                  ta.upperCap--; // decrementing the upper cap of ta
-                }
-                if(ta.upperCap===0){
-                  taAssigned[ta.rollNumber]=true; // if upper cap of ta is 0 then assigning ta to professor
-                }
-              }
-                
-              
-              noOfTaRequired--;
+            for(var ta of taPref2){
+              tempTA1.push({
+                rollNumber:ta.rollNumber,
+                cgpa:ta.cgpa,
+                courseCode:ta.preferences[0].courseCode,
+                courseGrade:ta.preferences[0].courseGrade
+              })
             }
-            if(noOfTaRequired===0){  // if no of ta required is 0 then break
-              break;
+
+            for(var ta of taPref2){
+              tempTA2.push({
+                rollNumber:ta.rollNumber,
+                cgpa:ta.cgpa,
+                courseCode:ta.preferences[0].courseCode,
+                courseGrade:ta.preferences[0].courseGrade
+              })
+            }
+
+            var taPref = [...tempTA0, ...tempTA1, ...tempTA2];
+
+            taPref.sort((a, b) => b.cgpa - a.cgpa);
+            sortOnGrade(taPref);
+
+    
+            console.log("taPref", taPref);
+            // console.log("taPref", taPref);
+            sortOnGrade(taPref);
+            matching.find(m => m.courseCode === professor.courseCode).expertTa.push(taPref[0].rollNumber);
+            noOftasRequired--;
+
+          }
+
+        }
+        else {
+          const ta1 = tas.filter(ta => ta.preferences[0].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
+          // console.log("-------------------",ta1);
+          const ta2 = tas.filter(ta => ta.preferences[1].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
+
+          const ta3 = tas.filter(ta => ta.preferences[2].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
+
+          const temp = [...ta1, ...ta2, ...ta3];
+
+          for (var ta of temp) {
+            if (ta.rollNumber === profTaRollNumber) {
+              matching.find(m => m.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
+              noOftasRequired--;
             }
           }
-          if(noOfTaRequired===0){
+        }
+
+        if(noOftasRequired===0){
+          break;
+        }
+        
+      }
+
+      // if no of tas required is still not zero then assign pg students first to the course if available 
+
+      if (noOftasRequired > 0) {
+        var temp1= pgTas.filter(ta => ta.preferences[0].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
+        var temp2= pgTas.filter(ta => ta.preferences[1].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
+        var temp3= pgTas.filter(ta => ta.preferences[2].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
+        var temp = [...temp1, ...temp2, ...temp3];
+        // console.log("temp",temp);
+        for (var ta of temp) {
+          if (!matching.find(m => m.courseCode === professor.courseCode).expertTa.includes(ta.rollNumber)) {
+            matching.find(m => m.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
+            noOftasRequired--;
+          }
+          if(noOftasRequired===0){
             break;
           }
         }
+        
       }
+            // if all pg students are over then assign ug students to the course
+      if (noOftasRequired > 0) {
+        var temp1 = ugTas.filter(ta => ta.preferences[0].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade));
+        var temp2 = ugTas.filter(ta => ta.preferences[1].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade));
+        var temp3 = ugTas.filter(ta => ta.preferences[2].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade));
 
-      if(batchTag){ // if professor preference contains batch tag
-
-        const sepByBatch= tas.filter(ta => !taAssigned[ta.rollNumber] && ta.rollNumber.slice(0,3)===profTaRollNumber.rollNumber);  // filtering the ta with same batch tag as professor preference
-        // console.log("sepByBatch",sepByBatch);
-
-  
         const tempTA0=[];
         const tempTA1=[];
         const tempTA2=[];
 
-        /// iterating over all the ta with same batch tag as professor preference and sorting them on cgpa and course grade
-
-        for(var k=0;k<sepByBatch.length;k++){
-
-          if(!taAssigned[sepByBatch[k].rollNumber]){
-            if(sepByBatch[k].preferences[0].courseCode===professor.courseCode){
-                if(checkCourseGrade(sepByBatch[k].preferences[0].courseGrade,professor.courseGrade)){
-                    tempTA0.push({
-                      rollNumber:sepByBatch[k].rollNumber,
-                      cgpa:sepByBatch[k].cgpa,
-                      courseGrade:sepByBatch[k].preferences[0].courseGrade,
-                      weight:sepByBatch[k].preferences[0].weight,
-                      upperCap:sepByBatch[k].upperCap,
-                    });
-                    }
-                }
-            
-
-            if(sepByBatch[k].preferences[1].courseCode===professor.courseCode){
-                if(checkCourseGrade(sepByBatch[k].preferences[1].courseGrade,professor.courseGrade)){
-                    tempTA1.push({
-                      rollNumber:sepByBatch[k].rollNumber,
-                      cgpa:sepByBatch[k].cgpa,
-                      courseGrade:sepByBatch[k].preferences[1].courseGrade,
-                      weight:sepByBatch[k].preferences[1].weight,
-                      upperCap:sepByBatch[k].upperCap,
-                    });
-                  }
-                }
-            
-
-            if(sepByBatch[k].preferences[2].courseCode===professor.courseCode){
-                if(checkCourseGrade(sepByBatch[k].preferences[2].courseGrade,professor.courseGrade)){
-                    tempTA2.push({
-                      rollNumber:sepByBatch[k].rollNumber,
-                      cgpa:sepByBatch[k].cgpa,
-                      courseGrade:sepByBatch[k].preferences[2].courseGrade,
-                      weight:sepByBatch[k].preferences[2].weight,
-                      upperCap:sepByBatch[k].upperCap,
-                    });
-                }
-            }
-          }
+        for(var ta of temp1){
+          tempTA0.push({
+            rollNumber:ta.rollNumber,
+            cgpa:ta.cgpa,
+            courseCode:ta.preferences[0].courseCode,
+            courseGrade:ta.preferences[0].courseGrade
+          })
+        }
+        for(var ta of temp2){
+          tempTA1.push({
+            rollNumber:ta.rollNumber,
+            cgpa:ta.cgpa,
+            courseCode:ta.preferences[1].courseCode,
+            courseGrade:ta.preferences[1].courseGrade
+          })
+        }
+        for(var ta of temp3){
+          tempTA2.push({
+            rollNumber:ta.rollNumber,
+            cgpa:ta.cgpa,
+            courseCode:ta.preferences[2].courseCode,
+            courseGrade:ta.preferences[2].courseGrade
+          })
         }
 
-        var temTA=[...tempTA0,...tempTA1,...tempTA2];
-        // console.log("temTA",temTA);
-        temTA.sort((a, b) => {b.cgpa - a.cgpa});
 
-        // console.log("temTA soeted cgpa",temTA);
-        
-        sortOnGrade(temTA);
-        /////////////////////////////////////////////////////////////////////////////////////////////
-
-        ///
-
-        for(var k=0;k<temTA.length;k++){
-          x= findProfessorByTARollNumber(professors,temTA[k].rollNumber,professor.courseCode);
-          if(noOfTaRequired>0){
-            var checkweight1=true;
-            if(x!== undefined && !taAssigned[ta.rollNumber]){
-              x.forEach((pref)=>{
-                pref.preferences.forEach((p)=>{
-                  // console.log("p",p,"profTaRollNumber",profTaRollNumber,"weight",profTaRollNumber.weight);
-                  if(p.rollNumber===temTA[k].rollNumber){
-                    checkweight1=false;
-                  }
-                })
-              })
-            }
-            // if (!x) {
-              const matchingCourse = matching.find(
-                (m) => m.courseCode === professor.courseCode
-              ); // finding the course in matching array  
-            
-              if (matchingCourse &&(!matchingCourse.expertTa || !matchingCourse.expertTa.includes(temTA[k].rollNumber))  // if the course is not present in matching array or ta is not present in expertTa array of course
-              )
-              {
-                matchingCourse.expertTa.push(temTA[k].rollNumber); // adding ta to expertTa array of course
-            
-                if (temTA[k].upperCap > 0) {
-                  temTA[k].upperCap--;
-                }
-                if (temTA[k].upperCap === 0) {
-                  taAssigned[temTA[k].rollNumber] = true;
-                }
-                noOfTaRequired--;
-                break;
-              }
-            // }
+      var temp = [...tempTA0, ...tempTA1, ...tempTA2];
+        // console.log("temp",temp);
+        temp.sort((a, b) => b.cgpa - a.cgpa);
+        sortOnGrade(temp);
+        // console.log("temp", temp);
+        for (var ta of temp) {
+          // console.log("ta",ta);
+          if (!matching.find(m => m.courseCode === professor.courseCode).expertTa.includes(ta.rollNumber)) {
+            // console.log("ta",ta);
+            matching.find(m => m.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
+            noOftasRequired--;
           }
-        }
-
-        /////////////////////////////////////////////////////////////////////////////////////////////
-      }
-    }
-
-    // if still no of ta required is greater than 0 then iterating over all the ta and sorting them on cgpa and course grade
-    // and assigning them to professor if they are not assigned to any professor
-    // and if no of ta required is 0 then break
-
-    if (noOfTaRequired > 0) {
-      const allTa_0 = tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode === ta.preferences[0].courseCode && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade));
-      const allTa_1 = tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode === ta.preferences[1].courseCode && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade));
-      const allTa_2 = tas.filter(ta => !taAssigned[ta.rollNumber] && professor.courseCode === ta.preferences[2].courseCode && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade));
-      const allTa = [...allTa_0, ...allTa_1, ...allTa_2];
-      allTa.sort((a, b) => b.cgpa - a.cgpa);
-      // allTa.sort((a, b) => a.cgpa - b.cgpa);
-      sortOnGrade(allTa);
-    
-      for (var k = 0; k < allTa.length; k++) {
-        const matchingCourse = matching.find(m => m.courseCode === professor.courseCode);
-        if (matchingCourse && (!matchingCourse.expertTa || !matchingCourse.expertTa.includes(allTa[k].rollNumber))) {
-          matchingCourse.expertTa.push(allTa[k].rollNumber);
-    
-          if (allTa[k].upperCap > 0) {
-            allTa[k].upperCap--;
-          }
-          if (allTa[k].upperCap === 0) {
-            taAssigned[allTa[k].rollNumber] = true;
-          }
-    
-          noOfTaRequired--;
-          if (noOfTaRequired === 0) {
+          if (noOftasRequired === 0) {
             break;
           }
         }
       }
-    }    
-
-    //////////////////////////////////////////////////////////////////////////////////
+      // console.log("-------------------------------");
   });
   
   
@@ -471,131 +367,131 @@ module.exports = allotment;
 
 
 
-  // const prof = [
-  //   {
-  //   //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
-  //     courseCode: 'eel1010',
-  //     courseName: 'design credit ee',
-  //     instructorName: 'ashish',
-  //     ugPg: 'ug',
-  //     electiveCore: 'core',
-  //     needToAttend: 0,
-  //     nof: 123,
-  //     theoryLab: 'theory',
-  //     cgpa: 8,
-  //     courseGrade: 'a-',
-  //     // taRollNumber1: 'b20',
-  //     // taRollNumber2: 'b20cs0111',
-  //     // taRollNumber3: 'b20ee0124',
-  //     taRollNumber1: 'b20ee011',
-  //     taRollNumber2: 'b20cs011',
-  //     taRollNumber3: 'b20ee123',
-  //     __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
-  //     courseCode: 'csl1010',
-  //     ugPg: 'ug',
-  //     courseName: 'design credit cs',
-  //     instructorName: 'kumar',
-  //     electiveCore: 'core',
-  //     needToAttend: 0,
-  //     nof: 123,
-  //     theoryLab: 'theory',
-  //     cgpa: 8,
-  //     courseGrade: 'a',
-  //     // taRollNumber1: 'b20ee011',
-  //     // taRollNumber2: 'b20cs010',
-  //     // taRollNumber3: 'b30cs000',
-  //     taRollNumber1: 'b20cs011',
-  //     taRollNumber2: 'b20cs111',
-  //     taRollNumber3: 'b20cs123',
-  //     __v: 0
-  //   }
-  // ];
+  const prof = [
+    {
+    //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
+      courseCode: 'eel1010',
+      courseName: 'design credit ee',
+      instructorName: 'ashish',
+      ugPg: 'ug',
+      electiveCore: 'core',
+      needToAttend: 0,
+      nof: 123,
+      theoryLab: 'theory',
+      cgpa: 8,
+      courseGrade: 'a-',
+      // taRollNumber1: 'b20',
+      // taRollNumber2: 'b20cs0111',
+      // taRollNumber3: 'b20ee0124',
+      taRollNumber1: 'b20ee011',
+      taRollNumber2: 'b20cs011',
+      taRollNumber3: 'b20ee123',
+      __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
+      courseCode: 'csl1010',
+      ugPg: 'ug',
+      courseName: 'design credit cs',
+      instructorName: 'kumar',
+      electiveCore: 'core',
+      needToAttend: 0,
+      nof: 123,
+      theoryLab: 'theory',
+      cgpa: 8,
+      courseGrade: 'a',
+      // taRollNumber1: 'b20ee011',
+      // taRollNumber2: 'b20cs010',
+      // taRollNumber3: 'b30cs000',
+      taRollNumber1: 'b20cs011',
+      taRollNumber2: 'b20cs111',
+      taRollNumber3: 'b20cs123',
+      __v: 0
+    }
+  ];
   
 
-  // const ta = [
-  //   {
-  //   //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
-  //     rollNumber: 'b20ee011',
-  //     cgpa: 9,
-  //     pref1: 'eel1010',
-  //     course_grade_pref_1: 'a-',
-  //     pref2: 'eel1020',
-  //     course_grade_pref_2: 'a',
-  //     pref3: 'eel1030',
-  //     course_grade_pref_3: 'a-',
-  //     __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-  //       rollNumber: 'b20cs011',
-  //       cgpa: 9,
-  //       pref1: 'csl1010',
-  //       course_grade_pref_1: 'a',
-  //       pref2: 'eel1010',
-  //       course_grade_pref_2: 'a',
-  //       pref3: 'eel1030',
-  //       course_grade_pref_3: 'a-',
-  //       __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  const ta = [
+    {
+    //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
+      rollNumber: 'b20ee011',
+      cgpa: 9,
+      pref1: 'eel1010',
+      course_grade_pref_1: 'a-',
+      pref2: 'eel1020',
+      course_grade_pref_2: 'a',
+      pref3: 'eel1030',
+      course_grade_pref_3: 'a-',
+      __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+        rollNumber: 'b20cs011',
+        cgpa: 9,
+        pref1: 'csl1010',
+        course_grade_pref_1: 'a',
+        pref2: 'eel1010',
+        course_grade_pref_2: 'a',
+        pref3: 'eel1030',
+        course_grade_pref_3: 'a-',
+        __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
         
-  //       rollNumber: 'b20ee0125',
-  //       cgpa: 9,
-  //       pref1: 'eel1010',
-  //       course_grade_pref_1: 'a',
-  //       pref2: 'eel1020',
-  //       course_grade_pref_2: 'a',
-  //       pref3: 'eel1030',
-  //       course_grade_pref_3: 'a-',
-  //       __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-  //   rollNumber: 'b20ee0126',
-  //   cgpa: 9,
-  //   pref1: 'eel1010',
-  //   course_grade_pref_1: 'a',
-  //   pref2: 'eel1020',
-  //   course_grade_pref_2: 'a',
-  //   pref3: 'eel1030',
-  //   course_grade_pref_3: 'a-',
-  //   __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-  //   rollNumber: 'b20ee0127',
-  //   cgpa: 9,
-  //   pref1: 'csl1010',
-  //   course_grade_pref_1: 'a',
-  //   pref2: 'eel1020',
-  //   course_grade_pref_2: 'a',
-  //   pref3: 'eel1030',
-  //   course_grade_pref_3: 'a-',
-  //   __v: 0 
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-  //   rollNumber: 'b20cs111',
-  //   cgpa: 9,
-  //   pref1: 'eel1010',
-  //   course_grade_pref_1: 'b',
-  //   pref2: 'csl1010',
-  //   course_grade_pref_2: 'a',
-  //   pref3: 'eel1030',
-  //   course_grade_pref_3: 'a-',
-  //   __v: 0
-  //   },
+        rollNumber: 'b20ee0125',
+        cgpa: 9,
+        pref1: 'eel1010',
+        course_grade_pref_1: 'a',
+        pref2: 'eel1020',
+        course_grade_pref_2: 'a',
+        pref3: 'eel1030',
+        course_grade_pref_3: 'a-',
+        __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+    rollNumber: 'b20ee0126',
+    cgpa: 9,
+    pref1: 'eel1010',
+    course_grade_pref_1: 'a',
+    pref2: 'eel1020',
+    course_grade_pref_2: 'a',
+    pref3: 'eel1030',
+    course_grade_pref_3: 'a-',
+    __v: 0
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+    rollNumber: 'b20ee0127',
+    cgpa: 9,
+    pref1: 'csl1010',
+    course_grade_pref_1: 'a',
+    pref2: 'eel1020',
+    course_grade_pref_2: 'a',
+    pref3: 'eel1030',
+    course_grade_pref_3: 'a-',
+    __v: 0 
+    },
+    {
+    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+    rollNumber: 'b20cs111',
+    cgpa: 9,
+    pref1: 'eel1010',
+    course_grade_pref_1: 'b',
+    pref2: 'csl1010',
+    course_grade_pref_2: 'a',
+    pref3: 'eel1030',
+    course_grade_pref_3: 'a-',
+    __v: 0
+    },
 
 
-  // ];
+  ];
 
 
-  // result=allotment(prof,ta);
-  // console.log(result);
+  result=allotment(prof,ta);
+  console.log(result);
 
 // const XLSX = require('xlsx');
 
