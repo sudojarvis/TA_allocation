@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 // var url = "mongodb://localhost:27017/";
-var url = "mongodb+srv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
+var url = "mongodb+smongodrv://admin:admin@cluster0.0nk9cwk.mongodb.net/test";
 
 // MongoClient.connect(url, function(err, db) {
 //   if (err) throw err;

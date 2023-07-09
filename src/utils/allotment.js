@@ -367,131 +367,131 @@ module.exports = allotment;
 
 
 
-  const prof = [
-    {
-    //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
-      courseCode: 'eel1010',
-      courseName: 'design credit ee',
-      instructorName: 'ashish',
-      ugPg: 'ug',
-      electiveCore: 'core',
-      needToAttend: 0,
-      nof: 123,
-      theoryLab: 'theory',
-      cgpa: 8,
-      courseGrade: 'a-',
-      // taRollNumber1: 'b20',
-      // taRollNumber2: 'b20cs0111',
-      // taRollNumber3: 'b20ee0124',
-      taRollNumber1: 'b20ee011',
-      taRollNumber2: 'b20cs011',
-      taRollNumber3: 'b20ee123',
-      __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
-      courseCode: 'csl1010',
-      ugPg: 'ug',
-      courseName: 'design credit cs',
-      instructorName: 'kumar',
-      electiveCore: 'core',
-      needToAttend: 0,
-      nof: 123,
-      theoryLab: 'theory',
-      cgpa: 8,
-      courseGrade: 'a',
-      // taRollNumber1: 'b20ee011',
-      // taRollNumber2: 'b20cs010',
-      // taRollNumber3: 'b30cs000',
-      taRollNumber1: 'b20cs011',
-      taRollNumber2: 'b20cs111',
-      taRollNumber3: 'b20cs123',
-      __v: 0
-    }
-  ];
+  // const prof = [
+  //   {
+  //   //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
+  //     courseCode: 'eel1010',
+  //     courseName: 'design credit ee',
+  //     instructorName: 'ashish',
+  //     ugPg: 'ug',
+  //     electiveCore: 'core',
+  //     needToAttend: 0,
+  //     nof: 123,
+  //     theoryLab: 'theory',
+  //     cgpa: 8,
+  //     courseGrade: 'a-',
+  //     // taRollNumber1: 'b20',
+  //     // taRollNumber2: 'b20cs0111',
+  //     // taRollNumber3: 'b20ee0124',
+  //     taRollNumber1: 'b20ee011',
+  //     taRollNumber2: 'b20cs011',
+  //     taRollNumber3: 'b20ee123',
+  //     __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
+  //     courseCode: 'csl1010',
+  //     ugPg: 'ug',
+  //     courseName: 'design credit cs',
+  //     instructorName: 'kumar',
+  //     electiveCore: 'core',
+  //     needToAttend: 0,
+  //     nof: 123,
+  //     theoryLab: 'theory',
+  //     cgpa: 8,
+  //     courseGrade: 'a',
+  //     // taRollNumber1: 'b20ee011',
+  //     // taRollNumber2: 'b20cs010',
+  //     // taRollNumber3: 'b30cs000',
+  //     taRollNumber1: 'b20cs011',
+  //     taRollNumber2: 'b20cs111',
+  //     taRollNumber3: 'b20cs123',
+  //     __v: 0
+  //   }
+  // ];
   
 
-  const ta = [
-    {
-    //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
-      rollNumber: 'b20ee011',
-      cgpa: 9,
-      pref1: 'eel1010',
-      course_grade_pref_1: 'a-',
-      pref2: 'eel1020',
-      course_grade_pref_2: 'a',
-      pref3: 'eel1030',
-      course_grade_pref_3: 'a-',
-      __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-        rollNumber: 'b20cs011',
-        cgpa: 9,
-        pref1: 'csl1010',
-        course_grade_pref_1: 'a',
-        pref2: 'eel1010',
-        course_grade_pref_2: 'a',
-        pref3: 'eel1030',
-        course_grade_pref_3: 'a-',
-        __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  // const ta = [
+  //   {
+  //   //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
+  //     rollNumber: 'b20ee011',
+  //     cgpa: 9,
+  //     pref1: 'eel1010',
+  //     course_grade_pref_1: 'a-',
+  //     pref2: 'eel1020',
+  //     course_grade_pref_2: 'a',
+  //     pref3: 'eel1030',
+  //     course_grade_pref_3: 'a-',
+  //     __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  //       rollNumber: 'b20cs011',
+  //       cgpa: 9,
+  //       pref1: 'csl1010',
+  //       course_grade_pref_1: 'a',
+  //       pref2: 'eel1010',
+  //       course_grade_pref_2: 'a',
+  //       pref3: 'eel1030',
+  //       course_grade_pref_3: 'a-',
+  //       __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
         
-        rollNumber: 'b20ee0125',
-        cgpa: 9,
-        pref1: 'eel1010',
-        course_grade_pref_1: 'a',
-        pref2: 'eel1020',
-        course_grade_pref_2: 'a',
-        pref3: 'eel1030',
-        course_grade_pref_3: 'a-',
-        __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-    rollNumber: 'b20ee0126',
-    cgpa: 9,
-    pref1: 'eel1010',
-    course_grade_pref_1: 'a',
-    pref2: 'eel1020',
-    course_grade_pref_2: 'a',
-    pref3: 'eel1030',
-    course_grade_pref_3: 'a-',
-    __v: 0
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-    rollNumber: 'b20ee0127',
-    cgpa: 9,
-    pref1: 'csl1010',
-    course_grade_pref_1: 'a',
-    pref2: 'eel1020',
-    course_grade_pref_2: 'a',
-    pref3: 'eel1030',
-    course_grade_pref_3: 'a-',
-    __v: 0 
-    },
-    {
-    //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-    rollNumber: 'b20cs111',
-    cgpa: 9,
-    pref1: 'eel1010',
-    course_grade_pref_1: 'b',
-    pref2: 'csl1010',
-    course_grade_pref_2: 'a',
-    pref3: 'eel1030',
-    course_grade_pref_3: 'a-',
-    __v: 0
-    },
+  //       rollNumber: 'b20ee0125',
+  //       cgpa: 9,
+  //       pref1: 'eel1010',
+  //       course_grade_pref_1: 'a',
+  //       pref2: 'eel1020',
+  //       course_grade_pref_2: 'a',
+  //       pref3: 'eel1030',
+  //       course_grade_pref_3: 'a-',
+  //       __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  //   rollNumber: 'b20ee0126',
+  //   cgpa: 9,
+  //   pref1: 'eel1010',
+  //   course_grade_pref_1: 'a',
+  //   pref2: 'eel1020',
+  //   course_grade_pref_2: 'a',
+  //   pref3: 'eel1030',
+  //   course_grade_pref_3: 'a-',
+  //   __v: 0
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  //   rollNumber: 'b20ee0127',
+  //   cgpa: 9,
+  //   pref1: 'csl1010',
+  //   course_grade_pref_1: 'a',
+  //   pref2: 'eel1020',
+  //   course_grade_pref_2: 'a',
+  //   pref3: 'eel1030',
+  //   course_grade_pref_3: 'a-',
+  //   __v: 0 
+  //   },
+  //   {
+  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
+  //   rollNumber: 'b20cs111',
+  //   cgpa: 9,
+  //   pref1: 'eel1010',
+  //   course_grade_pref_1: 'b',
+  //   pref2: 'csl1010',
+  //   course_grade_pref_2: 'a',
+  //   pref3: 'eel1030',
+  //   course_grade_pref_3: 'a-',
+  //   __v: 0
+  //   },
 
 
-  ];
+  // ];
 
 
-  result=allotment(prof,ta);
-  console.log(result);
+  // result=allotment(prof,ta);
+  // console.log(result);
 
 // const XLSX = require('xlsx');
 

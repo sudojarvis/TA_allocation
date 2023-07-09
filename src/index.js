@@ -14,6 +14,7 @@ const auth = require('../src/middleware/auth');
 const XLSX = require('xlsx');
 const ExcelJS = require('exceljs');
 const app = express();
+const bodyParser = require('body-parser');
 // const port = process.env.PORT;
 const port = 3000;
 
@@ -25,11 +26,15 @@ app.set("view engine", "hbs");
 app.set("views", viewsPath);
 hbs.registerPartials(partialsPath);
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.use(express.static(publicDirectoryPath));
 app.use(express.json());
 
 
 app.get("", (req, res) => {
+	// console.log("HIIIII");
 	res.render("index");
 });
 
@@ -53,8 +58,9 @@ app.get("/course", (req, res) => {
 	res.render("addcourse");
 });
 
-app.get("/deletecourse", (req, res) => {
-	res.render("deletecourse");
+app.get("/deletecourse", (req, res) => {;
+	console.log("HIII")
+	res.render("deletecourse1");
 });
 
 app.get("/deleteta", (req, res) => {
@@ -101,8 +107,7 @@ app.post("/adduser", async (req, res) => {
 	} catch(e) {
 		res.status(500).send(e);
 	}
-})
-
+});
 app.post("/allowedta", async (req, res) => {
 	try {
 		const neta = new ID(req.body);
@@ -112,11 +117,10 @@ app.post("/allowedta", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
-
 // API for profdetails
 app.post("/profdetails", async (req, res) => {
 	try {
-		// console.log(req.body);
+		
 		const courseCode = req.body.courseCode;
 		const prof = await PROF.findOneAndDelete({ courseCode });
 		console.log(prof);
@@ -279,9 +283,6 @@ app.get("/result", async (req, res) => {
 	  res.status(500).send('Error generating Excel file');
 	}
   });
-  
-
-
 // app.get("/result", async (req, res) => {
 // 	const prof = await PROF.find();
 // 	const ta = await TA.find();
@@ -468,13 +469,14 @@ app.get("/api", async (req, res) => {
 	});
 });
 
-app.post("/deletecourse1", async (req, res) => {
-	console.log("starting");
+app.post("/deletecourse", async (req, res) => {
+	console.log(req.body);
+	// console.log("HIIIiiiii");
 	try {
-		const courseCode = req.body.courseCode;
+		const courseCode = req.body.id;
 		console.log(courseCode);
 		await PROF.findOneAndDelete({ courseCode });
-		res.send(201);
+		res.redirect('/')
 	} catch (e) {
 		console.log("catch");
 		res.send(501);
