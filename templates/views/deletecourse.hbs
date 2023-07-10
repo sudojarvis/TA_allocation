@@ -64,18 +64,18 @@
   <h1>Drop course</h1>
 
   <div class="container">
-    <form action="/">
+    <form action="/deletecourse" method="POST">
       <label for="fname">Course Code</label>
       <span class="required">*</span>
       <input type="text" id="id" name="id" placeholder="Enter course code.." required>
       <label for="fname">Password</label>
       <span class="required">*</span>
       <input type="text" id="password" name="password" placeholder="Enter Password.." required>
-      <input type="submit" value="Submit">
+      <button type="submit danger">Submit</button>
     </form>
   </div>
   {{>footer}}
-  <script src="/js/deletecourse.js"></script>
+  {{!-- <script src="/js/deletecourse.js"></script> --}}
 
 </body>
 
