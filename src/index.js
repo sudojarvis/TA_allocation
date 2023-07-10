@@ -60,7 +60,7 @@ app.get("/course", (req, res) => {
 
 app.get("/deletecourse", (req, res) => {;
 	console.log("HIII")
-	res.render("deletecourse1");
+	res.render("deletecourse");
 });
 
 app.get("/deleteta", (req, res) => {
@@ -473,7 +473,7 @@ app.post("/deletecourse", async (req, res) => {
 	console.log(req.body);
 	// console.log("HIIIiiiii");
 	try {
-		const courseCode = req.body.id;
+		const courseCode = req.body.id.toLowerCase();
 		console.log(courseCode);
 		await PROF.findOneAndDelete({ courseCode });
 		res.redirect('/')
