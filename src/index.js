@@ -59,11 +59,12 @@ app.get("/course", (req, res) => {
 });
 
 app.get("/deletecourse", (req, res) => {;
-	console.log("HIII")
+	// console.log("HIII")
 	res.render("deletecourse");
 });
 
 app.get("/deleteta", (req, res) => {
+	// console.log("qwewrere");
 	res.render("deleteta");
 });
 
@@ -482,19 +483,22 @@ app.post("/deletecourse", async (req, res) => {
 		res.send(501);
 	}
 });
-app.post("/deleteta1", async (req, res) => {
-	console.log("starting");
+
+app.post("/deleteta", async (req, res) => {
+	// console.log("starting");
+	console.log(req.body);
 	try {
-		const rollNumber = req.body.rollNumber;
-		console.log(rollNumber);
-		await TA.findOneAndDelete({ rollNumber });
-		res.send(201);
-	} catch (e) {
-		console.log("catch");
-		res.send(501);
+	  const rollNumber = req.body.id.toLowerCase();
+	  console.log(rollNumber);
+	//   console.log("try")
+	  await TA.findOneAndDelete({ rollNumber });
+	  res.redirect('/');
+	} catch (error) {
+	  console.log(error);
+	  res.sendStatus(500); // Send 500 Internal Server Error status code
 	}
 });
-
+  
 app.listen(port, () => {
 	console.log(`app is up on port ${port}!`);
 });
