@@ -144,6 +144,8 @@ div.container {
       <option value="A-">A-</option>
       <option value="B">B</option>
       <option value="B-">B-</option>
+      <option value="C">C</option>
+      <option value="C-">C-</option>
     </select>
 
     <label for="prefta1">TA rollnumber1</label>
@@ -154,17 +156,15 @@ div.container {
 
     <label for="prefta3">TA rollnumber3</label>
     <input type="text" id="prefta3" name="prefta3" placeholder="Enter Rollnumber..">
-
-    <label for="password">Password</label>
-     <span class="required">*</span>
     {{!-- <input type="password" id="password" name="password" placeholder="Enter password.." required>
      --}}
-      <div class = "password-container">
-        <input type="password" id="password" name="password" placeholder="Enter Password.." required>
-        <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
-        <label for="showPassword" id="showPasswordLabel">Show Password</label>
-      </div>
-
+    <div class = "password-container">
+      <label for = "password">Password</label>
+      <span class="required">*</span>
+      <input type="password" id="password" name="password" placeholder="Enter Password.." required>
+      <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+      <label for="showPassword" id="showPasswordLabel">Show Password</label>
+    </div>
     
     <input type="submit" value="Submit">
   </form>

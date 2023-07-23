@@ -5,12 +5,17 @@ const messageLoc = document.querySelector("#message");
 
 function togglePasswordVisibility() {
     var passwordInput = document.getElementById("password");
-    if (passwordInput.type === "password") {
+    var showPasswordCheckbox = document.getElementById("showPassword");
+    var showPasswordLabel = document.getElementById("showPasswordLabel");
+  
+    if (showPasswordCheckbox.checked) {
       passwordInput.type = "text";
+      showPasswordLabel.textContent = "Hide Password";
     } else {
       passwordInput.type = "password";
+      showPasswordLabel.textContent = "Show Password";
     }
-}
+  }
 
 
 

@@ -86,9 +86,9 @@ div.container {
 
 
     {{!-- <label for="isUgStudent">Are you an Undergraduate (UG) student?</label>
-    <input type="checkbox" id="isUgStudent" name="isUgStudent"> --}}
+    <input type="checkbox" id="isUgStudent" name="isUgStudent">
 
-    {{!-- < id="ugFields" style="display: none;"> --}}
+    <div id="ugFields" style="display: none;"> --}}
 
       <label for="cgpa">CGPA</label>
       <span class="required">*</span>
@@ -109,6 +109,8 @@ div.container {
         <option value="A-">A-</option>
         <option value="B">B</option>
         <option value="B-">B-</option>
+        <option value="C">C</option>
+        <option value="C-">C-</option>
       </select>
 
 
@@ -126,8 +128,9 @@ div.container {
         <option value="A-">A-</option>
         <option value="B">B</option>
         <option value="B-">B-</option>
+        <option value="C">C</option>
+        <option value="C-">C-</option>
       </select>
-
 
 
       <label for="pref3">Preference 3</label>
@@ -144,20 +147,40 @@ div.container {
         <option value="A-">A-</option>
         <option value="B">B</option>
         <option value="B-">B-</option>
+        <option value="C">C</option>
+        <option value="C-">C-</option>
       </select>
-    {{!-- </> --}}
+    {{!-- </div> --}}
 
+  {{!-- <div id = "pgFields" style="display: block;"> --}}
+
+    <label for="pref1">Preference 1</label>
+    <span class="required">*</span>
+    <input type="text" id="pref1" name="pref1" placeholder="Enter course code.." required>
+
+
+    <label for="pref2">Preference 2</label>
+    <span class="required">*</span>
+    <input type="text" id="pref2" name="pref2" placeholder="Enter course code.." required>
+
+
+    <label for="pref3">Preference 3</label>
+    <span class="required">*</span>
+    <input type="text" id="pref3" name="pref3" placeholder="Enter course code.." required>
+  {{!-- </div> --}}
 
     <div class = "password-container">
+      <label for = "password">Password</label>
+      <span class="required">*</span>
       <input type="password" id="password" name="password" placeholder="Enter Password.." required>
       <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
       <label for="showPassword" id="showPasswordLabel">Show Password</label>
     </div>
-    
     <input type="submit" value="Submit">
   </form>
   {{!-- <p><b>Note</b>: If you are an expert in any of the Preference, fill the checkbox</p> --}}
 </div>
+
 
 
 <script src="/js/ta.js"></script>
