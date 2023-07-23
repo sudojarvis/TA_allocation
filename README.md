@@ -5,4 +5,5 @@
 ```bash
 npm install express
 npm install exceljs
+npm install bcryptjs
 ```

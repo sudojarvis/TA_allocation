@@ -47,6 +47,26 @@ div.container {
   background-color: #f7f8fa;
   {{!-- padding: 20px; --}}
 }
+
+  #password {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+
+  #showPasswordLabel {
+    position: absolute
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+  }
+  
 </style>
 <head>
     <title>Faculty Preference</title>
@@ -68,15 +88,31 @@ div.container {
 
     <label for="ugpg">UG/PG</label>
      <span class="required">*</span>
-    <input type="text" id="ugpg" name="ugpg" placeholder="Enter course type.." required>
+    {{!-- <input type="text" id="ugpg" name="ugpg" placeholder="Enter course type.." required> --}}
+    <select id="ugpg" name="ugpg" required>
+      <option value="">select course type</option>
+      <option value="ug">UG</option>
+      <option value="pg">PG</option>
+    </select>
+
 
     <label for="elective">Elective/core</label>
      <span class="required">*</span>
-    <input type="text" id="elective" name="elective" placeholder="Enter course type.." required>
+    {{!-- <input type="text" id="elective" name="elective" placeholder="Enter course type.." required> --}}
+    <select id="elective" name="elective" required>
+      <option value="">select course type</option>
+      <option value="elective">Elective</option>
+      <option value="core">Core</option>
+    </select>
 
     <label for="needto">Need to attend lecture</label>
      <span class="required">*</span>
-    <input type="text" id="needto" name="needto" placeholder="0/1" required>
+    {{!-- <input type="text" id="needto" name="needto" placeholder="0/1" required> --}}
+    <select id="needto" name="needto" required>
+      <option value="">0/1</option>
+      <option value="0">0</option>
+      <option value="1">1</option>
+    </select>
 
     <label for="needto">Number of students in course</label>
      <span class="required">*</span>
@@ -84,7 +120,12 @@ div.container {
 
     <label for="needto">Theory/Lab</label>
      <span class="required">*</span>
-    <input type="text" id="theorylab" name="theorylab" placeholder="Enter course type.." required>
+    {{!-- <input type="text" id="theorylab" name="theorylab" placeholder="Enter course type.." required> --}}
+    <select id="theorylab" name="theorylab" required>
+      <option value="">select theory or lab </option>
+      <option value="theory">Theory</option>
+      <option value="lab">Lab</option>
+    </select>
 
     <label for="coursename" > Course Name </label>
      <span class="requrired">*</span>
@@ -96,7 +137,14 @@ div.container {
 
     <label for="courseGrade">Course Grade Required</label>
      <span class="required">*</span>
-    <input type="text" id="courseGrade" name="courseGrade" placeholder="Enter course grade.." required>
+    {{!-- <input type="text" id="courseGrade" name="courseGrade" placeholder="Enter course grade.." required> --}}
+    <select id="courseGrade" name="courseGrade" required>
+      <option value="">select the grade</option>
+      <option value="A">A</option>
+      <option value="A-">A-</option>
+      <option value="B">B</option>
+      <option value="B-">B-</option>
+    </select>
 
     <label for="prefta1">TA rollnumber1</label>
     <input type="text" id="prefta1" name="prefta1" placeholder="Enter Rollnumber..">
@@ -109,15 +157,20 @@ div.container {
 
     <label for="password">Password</label>
      <span class="required">*</span>
-    <input type="text" id="password" name="password" placeholder="Enter password.." required>
-
+    {{!-- <input type="password" id="password" name="password" placeholder="Enter password.." required>
+     --}}
+      <div class = "password-container">
+        <input type="password" id="password" name="password" placeholder="Enter Password.." required>
+        <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+        <label for="showPassword" id="showPasswordLabel">Show Password</label>
+      </div>
 
     
     <input type="submit" value="Submit">
   </form>
   
 </div>
-{{>footer}}
+{{!-- {{>footer}} --}}
 <script src="/js/prof.js"></script>
 </body>
 </html>

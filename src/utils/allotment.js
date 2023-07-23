@@ -61,7 +61,7 @@ function allotment(prof, ta) {
       preferences,
       theoryLab: p.theoryLab,
       noOfStudents: p.nof,
-      cgpa: p.cgpa,
+      // cgpa: p.cgpa,
       courseGrade: p.courseGrade,
       instructor: p.instructorName,
       courseName: p.courseName,
@@ -69,7 +69,7 @@ function allotment(prof, ta) {
     };
   });
 
-  console.log(professors);
+  // console.log(professors);
   
 
   const tas = ta.map(t => ({
@@ -83,8 +83,7 @@ function allotment(prof, ta) {
   })
   );
 
-
-      
+  console.log(tas);    
  
 
   var presentYear = new Date().getFullYear();
@@ -309,8 +308,6 @@ function allotment(prof, ta) {
               taAssigned[ta.rollNumber]=true;
             }
   
-      
-
           }
         }
 
@@ -332,8 +329,9 @@ function allotment(prof, ta) {
       // console.log("temp",temp);
       for (var ta of temp) {
         if (!matching.find(m => m.courseCode === professor.courseCode).expertTa.includes(ta.rollNumber)) {
-
-          if(!taAssigned[ta.rollNumber]){
+          
+          
+          if(!taAssigned[ta.rollNumber] && !specificallyChosenByOtherProf(ta.rollNumber,professor.courseCode)){
 
             matching.find(m => m.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
             noOftasRequired--;
@@ -407,7 +405,7 @@ function allotment(prof, ta) {
         }
       }
     }
-    console.log("-------------------------------");
+    // console.log("-------------------------------");
 });
 
 
@@ -424,7 +422,7 @@ function allotment(prof, ta) {
       });
   }
 
-  console.log("jsonformated",jsonformated);
+  // console.log("jsonformated",jsonformated);
 
     return jsonformated;
     // return matching;
@@ -438,283 +436,112 @@ module.exports = allotment;
 
 
 
-
-// const prof =[
-//   {
-//     courseCode: 'eel1010',
-//     courseName: 'design credit ee',
-//     instructorName: 'ashish',
-//     ugPg: 'ug',
-//     electiveCore: 'core',
-//     needToAttend: 0,
-//     noOfStudents: 123,
-//     theoryLab: 'theory',
-//     courseGrade: 'a',
-//     taRollNumber1: 'b20ee011',
-//     taRollNumber2: 'b20ee111',
-//     taRollNumber3: 'b20ee123'
+// const profs = [{
+//   "_id": {
+//     "$oid": "64bcdc4ca9e301deb420b165"
 //   },
-//   {
-//     courseCode: 'csl1010',
-//     courseName: 'design credit cs',
-//     instructorName: 'kumar',
-//     ugPg: 'ug',
-//     electiveCore: 'core',
-//     needToAttend: 0,
-//     noOfStudents: 140,
-//     theoryLab: 'lab',
-//     courseGrade: 'a',
-//     taRollNumber1: 'b20cs011',
-//     taRollNumber2: 'b20cs111',
-//     taRollNumber3: 'b20cs123'
-//   }
-// ];
-
-// const ta =[
-//   {
-//     rollNumber: 'eel1010',
-//     pref1: 'eel1010',
-//     course_grade_pref_1: 'a',
-//     pref2: 'csl1010',
-//     course_grade_pref_2: 'a',
-//     pref3: 'eel1030',
-//     course_grade_pref_3: 'a'
+//   "courseCode": "eel1010",
+//   "courseName": "dasds",
+//   "instructorName": "sdffd",
+//   "ugPg": "ug",
+//   "electiveCore": "elective",
+//   "needToAttend": 0,
+//   "nof": 234,
+//   "theoryLab": "theory",
+//   "courseGrade": "a",
+//   "taRollNumber1": "p20ee002",
+//   "taRollNumber2": "p20ee001",
+//   "taRollNumber3": "p20ee005",
+//   "password": "$2a$08$PA1LkPuo84xXj1fohpoDlufhftqv7rqsFaYToWKNzz.Q3INhp5PFm",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bcdc99a9e301deb420b168"
 //   },
-//   {
-//     rollNumber: 'b20cs011',
-//     pref1: 'csl1010',
-//     course_grade_pref_1: 'a',
-//     pref2: 'csl1020',
-//     course_grade_pref_2: 'a',
-//     pref3: 'csl1030',
-//     course_grade_pref_3: 'a'
-//   }
-// ]
-
-// result=allotment(prof,ta);
-// console.log("----------------",result);
-
-
-
-
-
-  // const prof = [
-  //   {
-  //   //   _id: new ObjectId("647b4dab37c4ac2be44b90b9"),
-  //     courseCode: 'eel1010',
-  //     courseName: 'design credit ee',
-  //     instructorName: 'ashish',
-  //     ugPg: 'ug',
-  //     electiveCore: 'core',
-  //     needToAttend: 0,
-  //     nof: 123,
-  //     theoryLab: 'theory',
-  //     cgpa: 8,
-  //     courseGrade: 'a-',
-  //     // taRollNumber1: 'b20',
-  //     // taRollNumber2: 'b20cs0111',
-  //     // taRollNumber3: 'b20ee0124',
-  //     taRollNumber1: 'b20ee011',
-  //     taRollNumber2: 'b20cs011',
-  //     taRollNumber3: 'b20ee123',
-  //     __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4f755e59c516bc8bec82"),
-  //     courseCode: 'csl1010',
-  //     ugPg: 'ug',
-  //     courseName: 'design credit cs',
-  //     instructorName: 'kumar',
-  //     electiveCore: 'core',
-  //     needToAttend: 0,
-  //     nof: 123,
-  //     theoryLab: 'theory',
-  //     cgpa: 8,
-  //     courseGrade: 'a',
-  //     // taRollNumber1: 'b20ee011',
-  //     // taRollNumber2: 'b20cs010',
-  //     // taRollNumber3: 'b30cs000',
-  //     taRollNumber1: 'b20cs011',
-  //     taRollNumber2: 'b20cs111',
-  //     taRollNumber3: 'b20cs123',
-  //     __v: 0
-  //   }
-  // ];
-  
-
-  // const ta = [
-  //   {
-  //   //   _id: new ObjectId("647b4cfe37c4ac2be44b90b6"),
-  //     rollNumber: 'b20ee011',
-  //     cgpa: 9,
-  //     pref1: 'eel1010',
-  //     course_grade_pref_1: 'a-',
-  //     pref2: 'eel1020',
-  //     course_grade_pref_2: 'a',
-  //     pref3: 'eel1030',
-  //     course_grade_pref_3: 'a-',
-  //     __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-  //       rollNumber: 'b20cs011',
-  //       cgpa: 9,
-  //       pref1: 'csl1010',
-  //       course_grade_pref_1: 'a',
-  //       pref2: 'eel1010',
-  //       course_grade_pref_2: 'a',
-  //       pref3: 'eel1030',
-  //       course_grade_pref_3: 'a-',
-  //       __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-        
-  //       rollNumber: 'b20ee0125',
-  //       cgpa: 9,
-  //       pref1: 'eel1010',
-  //       course_grade_pref_1: 'a',
-  //       pref2: 'eel1020',
-  //       course_grade_pref_2: 'a',
-  //       pref3: 'eel1030',
-  //       course_grade_pref_3: 'a-',
-  //       __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-  //   rollNumber: 'b20ee0126',
-  //   cgpa: 9,
-  //   pref1: 'eel1010',
-  //   course_grade_pref_1: 'a',
-  //   pref2: 'eel1020',
-  //   course_grade_pref_2: 'a',
-  //   pref3: 'eel1030',
-  //   course_grade_pref_3: 'a-',
-  //   __v: 0
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-  //   rollNumber: 'b20ee0127',
-  //   cgpa: 9,
-  //   pref1: 'csl1010',
-  //   course_grade_pref_1: 'a',
-  //   pref2: 'eel1020',
-  //   course_grade_pref_2: 'a',
-  //   pref3: 'eel1030',
-  //   course_grade_pref_3: 'a-',
-  //   __v: 0 
-  //   },
-  //   {
-  //   //   _id: new ObjectId("647b4fc05e59c516bc8bec85"),
-  //   rollNumber: 'b20cs111',
-  //   cgpa: 9,
-  //   pref1: 'eel1010',
-  //   course_grade_pref_1: 'b',
-  //   pref2: 'csl1010',
-  //   course_grade_pref_2: 'a',
-  //   pref3: 'eel1030',
-  //   course_grade_pref_3: 'a-',
-  //   __v: 0
-  //   },
-
-
-  // ];
-
-
-  // result=allotment(prof,ta);
-  // console.log(result);
-
-// const XLSX = require('xlsx');
+//   "courseCode": "eel2020",
+//   "courseName": "sdads",
+//   "instructorName": "vcnxb",
+//   "ugPg": "ug",
+//   "electiveCore": "core",
+//   "needToAttend": 0,
+//   "nof": 38,
+//   "theoryLab": "theory",
+//   "courseGrade": "a",
+//   "taRollNumber1": "p20ee001",
+//   "taRollNumber2": "p20ee002",
+//   "taRollNumber3": "p20ee003",
+//   "password": "$2a$08$DBDYWxeSNufFuJmNva9Cpesm4swYTN9SjqgZ944iIdh631IJ2soMa",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bcdcdda9e301deb420b16b"
+//   },
+//   "courseCode": "eel3030",
+//   "courseName": "sdfs",
+//   "instructorName": "nht",
+//   "ugPg": "ug",
+//   "electiveCore": "elective",
+//   "needToAttend": 1,
+//   "nof": 232,
+//   "theoryLab": "theory",
+//   "courseGrade": "a-",
+//   "taRollNumber1": "p20ee003",
+//   "taRollNumber2": "p20ee004",
+//   "taRollNumber3": "p20ee001",
+//   "password": "$2a$08$gqmKjqmefLXzxGFg4vIv1.dE8RY.J75IHUAP7M00MPKep.OIJFjI.",
+//   "__v": 0
+// }]
 
 
 
+// const tas = [{
+//   "_id": {
+//     "$oid": "64bcdaa4a9e301deb420b15c"
+//   },
+//   "rollNumber": "p20ee011",
+//   "cgpa": 9,
+//   "pref1": "eel1010",
+//   "course_grade_pref_1": "a-",
+//   "pref2": "eel2020",
+//   "course_grade_pref_2": "a-",
+//   "pref3": "eel3030",
+//   "course_grade_pref_3": "b-",
+//   "password": "$2a$08$qZBba4s788O39DAQpE7sdeAld.ZMBUbxHXA2xtW9XsLx8YkSrdSxC",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bcdb77a9e301deb420b15f"
+//   },
+//   "rollNumber": "p20ee002",
+//   "cgpa": 9,
+//   "pref1": "eel2020",
+//   "course_grade_pref_1": "a",
+//   "pref2": "eel1010",
+//   "course_grade_pref_2": "a-",
+//   "pref3": "eel3030",
+//   "course_grade_pref_3": "a-",
+//   "password": "$2a$08$O/DWxT3wAtxjpaFeTldjSeWqBpKHP670RuqLSH7U8L.GwePAgOOtq",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bcdbdba9e301deb420b162"
+//   },
+//   "rollNumber": "p20ee003",
+//   "cgpa": 9,
+//   "pref1": "eel3030",
+//   "course_grade_pref_1": "a-",
+//   "pref2": "eel1010",
+//   "course_grade_pref_2": "a-",
+//   "pref3": "eel1010",
+//   "course_grade_pref_3": "a-",
+//   "password": "$2a$08$VPqONRHPrsYRTiVe/pZ9tuOvnb7Ob1vGw6mREKmsAxlk3g7Nd2GRO",
+//   "__v": 0
+// }]
+
+// console.log(allotment(profs, tas));
 
 
-// const data = result;
-
-
-// const workbook = XLSX.utils.book_new();
-// const worksheet = XLSX.utils.json_to_sheet(data);
-// XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-// XLSX.writeFile(workbook, 'output2.xlsx');
-
-// const ExcelJS = require('exceljs');
-
-// // const data = [
-// //     {
-// //       coursecode: "EEL1010",
-// //       experta: "B20EE011,b20EE023,b20EE0111"
-// //     },
-// //     {
-// //       coursecode: "EEL1020",
-// //       experta: "B20EE012,B20EE024,B20EE0112"
-// //     },
-// //     {
-// //       coursecode: "EEL1030",
-// //       experta: "B20EE013,B20EE025,B20EE0113"
-// //     }
-// //   ];
-
-// const data = result;
-  
-//   // Create a new workbook
-//   const workbook = new ExcelJS.Workbook();
-//   const worksheet = workbook.addWorksheet('Sheet1');
-  
-//   // Set headers
-//   worksheet.getCell(1, 1).value = 'course Code';
-//   worksheet.getCell(1, 2).value = 'ExpertTa';
-  
-//   // Split the values and assign them to separate columns
-//   data.forEach((item, index) => {
-//     worksheet.getCell(index + 2, 1).value = item.courseCode;
-  
-//     const values = item.expertTa.split(',');
-  
-//     values.forEach((value, columnIndex) => {
-//       worksheet.getCell(index + 2, columnIndex + 2).value = value;
-//     });
-//   });
-  
-//   // Save the workbook
-//   workbook.xlsx.writeFile('output.xlsx')
-//     .then(() => {
-//       console.log('Excel file generated successfully.');
-//     })
-//     .catch((error) => {
-//       console.log('Error generating Excel file:', error);
-//     });
-  
-
-// const XlsxPopulate = require('xlsx-populate');
-// Create a new workbook
-// XlsxPopulate.fromBlankAsync().then(workbook => {
-//   // Get the first sheet
-//   const sheet = workbook.sheet(0);
-
-//   // Set the headers
-//   const headers = Object.keys(data[0]);
-//   headers.forEach((header, index) => {
-//     sheet.cell(1, index + 1).value(header);
-//   });
-
-//   // Set the data
-//   data.forEach((item, rowIndex) => {
-//     Object.entries(item).forEach(([key, value], columnIndex) => {
-//       if (Array.isArray(value)) {
-//         value.forEach((arrayValue, arrayIndex) => {
-//           sheet.cell(rowIndex + 2 + arrayIndex, columnIndex + 1).value(arrayValue);
-//         });
-//       } else {
-//         sheet.cell(rowIndex + 2, columnIndex + 1).value(value);
-//       }
-//     });
-//   });
-
-//   // Save the workbook to a file
-//   return workbook.toFileAsync('output.xlsx');
-// }).then(() => {
-//   console.log('Excel file created successfully!');
-// }).catch(error => {
-//   console.error('Error:', error);
-// });

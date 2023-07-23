@@ -12,8 +12,6 @@ facultyForm.addEventListener("submit", function () {
         "id": id,
         "password": password
     }
-    console.log("entry got");
-
     var url = '/checkpasswordprof';
     fetch(url, {
         method: 'POST',

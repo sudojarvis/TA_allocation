@@ -51,7 +51,55 @@
       }
     }
   }
+
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  .password-container {
+    position: relative;
+  }
+
+
+  .submit-button {
+    margin-top: 100px;
+  }
+
+  #password {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+
+  #showPasswordLabel {
+    position: absolute
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+
+  }
+
+
 </style>
+
+<script>
+  function togglePasswordVisibility() {
+    var passwordInput = document.getElementById("password");
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+    } else {
+      passwordInput.type = "password";
+    }
+  }
+</script>
 
 <head>
   <title>Delete courses</title>
@@ -62,7 +110,6 @@
 <body>
 
   <h1>Drop course</h1>
-
   <div class="container">
     <form action="/deletecourse" method="POST">
       <label for="fname">Course Code</label>
@@ -70,11 +117,21 @@
       <input type="text" id="id" name="id" placeholder="Enter course code.." required>
       <label for="fname">Password</label>
       <span class="required">*</span>
-      <input type="text" id="password" name="password" placeholder="Enter Password.." required>
-      <button type="submit danger">Submit</button>
+      <div class = "password-container">
+        <input type="password" id="password" name="password" placeholder="Enter Password.." required>
+        <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+        <label for="showPassword" id="showPasswordLabel">Show Password</label>
+      </div>
+      <span class="submit-button">
+        <button type="submit danger">Submit</button>
+      </span>
     </form>
+    {{#if error}}
+    <p class="error-message">{{error}}</p>
+
+    {{/if}}
   </div>
-  {{>footer}}
+  {{!-- {{>footer}} --}}
   {{!-- <script src="/js/deletecourse.js"></script> --}}
 
 </body>

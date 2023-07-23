@@ -43,6 +43,28 @@ div.container {
   background-color: #f7f8fa;
   {{!-- padding: 20px; --}}
 }
+
+#password {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
+#showPasswordLabel {
+  position: absolute
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+}
+  
+
+
 </style>
 <head>
     <title>TA Preference</title>
@@ -61,61 +83,83 @@ div.container {
     <label for="rollNumber">TA Roll Number</label>
     <span class="required">*</span>
     <input type="text" id="rollNumber" name="rollNumber" placeholder="Enter your rollnumber.." required>
-    {{!-- <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> --}}
-
-    <label for="cgpa">CGPA</label>
-    <span class="required">*</span>
-    <input type="text" id="cgpa" name="cgpa" placeholder="Enter your cgpa.." required>
- 
-
-    <label for="pref1">Preference 1</label>
-    <span class="required">*</span>
-    <input type="text" id="pref1" name="pref1" placeholder="Enter course code.." required>
-    {{!-- <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> --}}
-
-    <label for="course_grade_pref_1">Course Grade for Preference 1</label>
-    <span class="required">*</span>
-    <input type="text" id="course_grade_pref_1" name="course_grade_pref_1" placeholder="Enter your course grade.." required>
 
 
-    <label for="pref2">Preference 2</label>
-    <span class="required">*</span>
-    <input type="text" id="pref2" name="pref2" placeholder="Enter course code.." required>
-    {{!-- <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> --}}
+    {{!-- <label for="isUgStudent">Are you an Undergraduate (UG) student?</label>
+    <input type="checkbox" id="isUgStudent" name="isUgStudent"> --}}
 
-    <label for="course_grade_pref_2">Course Grade for Preference 2</label>  
-    <span class="required">*</span>
-    <input type="text" id="course_grade_pref_2" name="course_grade_pref_2" placeholder="Enter your course grade.." required>
+    {{!-- < id="ugFields" style="display: none;"> --}}
+
+      <label for="cgpa">CGPA</label>
+      <span class="required">*</span>
+      <input type="text" id="cgpa" name="cgpa" placeholder="Enter your cgpa.." required>
+  
+
+      <label for="pref1">Preference 1</label>
+      <span class="required">*</span>
+      <input type="text" id="pref1" name="pref1" placeholder="Enter course code.." required>
+      
+
+      <label for="course_grade_pref_1">Course Grade for Preference 1</label>
+      <span class="required">*</span>
+      {{!-- <input type="text" id="course_grade_pref_1" name="course_grade_pref_1" placeholder="Enter your course grade.." required> --}}
+      <select id="course_grade_pref_1" name="course_grade_pref_1" required>
+        <option value="">Select course grade</option>
+        <option value="A">A</option>
+        <option value="A-">A-</option>
+        <option value="B">B</option>
+        <option value="B-">B-</option>
+      </select>
+
+
+      <label for="pref2">Preference 2</label>
+      <span class="required">*</span>
+      <input type="text" id="pref2" name="pref2" placeholder="Enter course code.." required>
+    
+
+      <label for="course_grade_pref_2">Course Grade for Preference 2</label>  
+      <span class="required">*</span>
+      {{!-- <input type="text" id="course_grade_pref_2" name="course_grade_pref_2" placeholder="Enter your course grade.." required> --}}
+      <select id="course_grade_pref_2" name="course_grade_pref_2" required>
+        <option value="">Select course grade</option>
+        <option value="A">A</option>
+        <option value="A-">A-</option>
+        <option value="B">B</option>
+        <option value="B-">B-</option>
+      </select>
 
 
 
-    <label for="pref3">Preference 3</label>
-    <span class="required">*</span>
-    <input type="text" id="pref3" name="pref3" placeholder="Enter course code.." required>
+      <label for="pref3">Preference 3</label>
+      <span class="required">*</span>
+      <input type="text" id="pref3" name="pref3" placeholder="Enter course code.." required>
 
 
-    <label for="course_grade_pref_3">Course Grade for Preference 3</label>
-    <span class="required">*</span>
-    <input type="text" id="course_grade_pref_3" name="course_grade_pref_3" placeholder="Enter your course grade.." required>
+      <label for="course_grade_pref_3">Course Grade for Preference 3</label>
+      <span class="required">*</span>
+      {{!-- <input type="text" id="course_grade_pref_3" name="course_grade_pref_3" placeholder="Enter your course grade.." required> --}}
+      <select id="course_grade_pref_3" name="course_grade_pref_3" required>
+        <option value="">Select course grade</option>
+        <option value="A">A</option>
+        <option value="A-">A-</option>
+        <option value="B">B</option>
+        <option value="B-">B-</option>
+      </select>
+    {{!-- </> --}}
 
 
-    <label for="password">Password</label>
-    <span class="required">*</span>
-    <input type="text" id="password" name="password" placeholder="Enter your password.." required>
-
-    {{!-- <label for="expert1">expert1</label>
-    <input type="text" id="expert1" name="expert1" placeholder="Enter course code of your expertise" required>
-
-    <label for="expert2">expert2</label>
-    <input type="text" id="expert2" name="expert2" placeholder="Enter course code of your expertise" required>
-
-    <label for="expert3">expert3</label>
-    <input type="text" id="expert3" name="expert3" placeholder="Enter course code of your expertise" required> --}}
+    <div class = "password-container">
+      <input type="password" id="password" name="password" placeholder="Enter Password.." required>
+      <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+      <label for="showPassword" id="showPasswordLabel">Show Password</label>
+    </div>
+    
     <input type="submit" value="Submit">
   </form>
-  <p><b>Note</b>: If you are an expert in any of the Preference, fill the checkbox</p>
+  {{!-- <p><b>Note</b>: If you are an expert in any of the Preference, fill the checkbox</p> --}}
 </div>
-{{>footer}}
+
+
 <script src="/js/ta.js"></script>
 </body>
 </html>

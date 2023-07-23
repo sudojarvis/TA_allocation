@@ -31,6 +31,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(publicDirectoryPath));
 app.use(express.json());
+const bcrypt = require('bcryptjs');
 
 
 app.get("", (req, res) => {
@@ -85,17 +86,37 @@ app.get("/dropdata", (req, res) => {
 // API for tadetails
 app.post("/tadetails", async (req, res) => {
 	try {
-		const rollNumber = req.body.rollNumber;
-		const ta = await TA.findOneAndDelete({ rollNumber });
-		console.log(ta);
-		const newTa = new TA(req.body);
-		// console.log(newTa);
-		await newTa.save();
-		res.status(201).send(newTa);
+	  const rollNumber = req.body.rollNumber;
+  
+	  // Find and delete the existing TA record (if found)
+	  const ta = await TA.findOneAndDelete({ rollNumber });
+
+	  const hashedPassword = await bcrypt.hash(req.body.password, 8);
+
+  
+	  const newTaEntry = {
+		"rollNumber": rollNumber,
+		"cgpa": req.body.cgpa,
+		"pref1": req.body.pref1,
+		"course_grade_pref_1": req.body.course_grade_pref_1,
+		"pref2": req.body.pref2,
+		"course_grade_pref_2": req.body.course_grade_pref_2,
+		"pref3": req.body.pref3,
+		"course_grade_pref_3": req.body.course_grade_pref_3,
+		"password": hashedPassword,
+	  }
+  
+	  // Create a new TA entry and save it to the database
+	  const newTa = new TA(newTaEntry);
+	  await newTa.save();
+	  
+	  res.status(201).send(newTa);
 	} catch (e) {
-		res.status(500).send(e);
+	  console.log(e); // Output the error to the console for debugging
+	  res.status(500).send("Internal Server Error");
 	}
-});
+  });
+  
 
 app.post("/adduser", async (req, res) => {
 	console.log("called");
@@ -108,6 +129,7 @@ app.post("/adduser", async (req, res) => {
 	} catch(e) {
 		res.status(500).send(e);
 	}
+
 });
 app.post("/allowedta", async (req, res) => {
 	try {
@@ -119,15 +141,39 @@ app.post("/allowedta", async (req, res) => {
 	}
 });
 // API for profdetails
+
+// API for profdetails
 app.post("/profdetails", async (req, res) => {
 	try {
-		
 		const courseCode = req.body.courseCode;
-		const prof = await PROF.findOneAndDelete({ courseCode });
-		console.log(prof);
-		const newProf = new PROF(req.body);
-		// console.log(newProf);
+		const newProfData = req.body; // Get the data from the request body
+
+		// Hash the password before saving it in the database
+		const hashedPassword = await bcrypt.hash(newProfData.password, 8);
+
+		// Find the existing document based on courseCode and delete it
+		await PROF.findOneAndDelete({ courseCode });
+
+		// Create a new document with the updated data
+		const profData = {
+			"courseCode": courseCode,
+			"courseName": newProfData.courseName,
+			"instructorName": newProfData.instructorName,
+			"ugPg": newProfData.ugPg,
+			"electiveCore": newProfData.electiveCore,
+			"needToAttend": newProfData.needToAttend,
+			"nof": newProfData.nof,
+			"courseGrade": newProfData.courseGrade,
+			"theoryLab": newProfData.theoryLab,
+			"taRollNumber1": newProfData.taRollNumber1,
+			"taRollNumber2": newProfData.taRollNumber2,
+			"taRollNumber3": newProfData.taRollNumber3,
+			"password": hashedPassword,
+		};
+
+		const newProf = new PROF(profData);
 		await newProf.save();
+
 		res.status(201).send(newProf);
 	} catch (e) {
 		res.status(500).send(e);
@@ -135,37 +181,38 @@ app.post("/profdetails", async (req, res) => {
 });
 
 
-app.post("/checkpasswordta", async (req, res) => {
-	try {
-		const id = req.body.id;
-		const pass = req.body.password;
-		const user = await ID_Ta.findOne({ id });
-		const data = {
-			check: "no"
-		}
-		if (user && user.password == pass) data.check = "yes";
-		res.status(201).send(data);
-	} catch (e) {
-		res.status(500).send(e);
-		// res.status(201).send(data);
-	}
-});
 
-app.post("/checkpasswordprof", async (req, res) => {
-	try {
-		const id = req.body.id;
-		const pass = req.body.password;
-		const user = await ID_prof.findOne({ id });
-		const data = {
-			check: "no"
-		}
-		if (user && user.password == pass) data.check = "yes";
-		res.status(201).send(data);
-	} catch (e) {
-		res.status(500).send(e);
-		// res.status(201).send(data);
-	}
-});
+// app.post("/checkpasswordta", async (req, res) => {
+// 	try {
+// 		const id = req.body.id;
+// 		const pass = req.body.password;
+// 		const user = await ID_Ta.findOne({ id });
+// 		const data = {
+// 			check: "no"
+// 		}
+// 		if (user && user.password == pass) data.check = "yes";
+// 		res.status(201).send(data);
+// 	} catch (e) {
+// 		res.status(500).send(e);
+// 		// res.status(201).send(data);
+// 	}
+// });
+
+// app.post("/checkpasswordprof", async (req, res) => {
+// 	try {
+// 		const id = req.body.id;
+// 		const pass = req.body.password;
+// 		const user = await ID_prof.findOne({ id });
+// 		const data = {
+// 			check: "no"
+// 		}
+// 		if (user && user.password == pass) data.check = "yes";
+// 		res.status(201).send(data);
+// 	} catch (e) {
+// 		res.status(500).send(e);
+// 		// res.status(201).send(data);
+// 	}
+// });
 
 app.post("/checkpasswordadmin", async (req, res) => {
 	try {
@@ -221,8 +268,8 @@ app.get("/showdata", async (req, res) => {
 		obj["course_grade_pref3"] = ta[i].course_grade_pref_3;
 		tadetail.push(obj);
 	}
-	console.log(coursedetail);
-	console.log(tadetail);
+	// console.log(coursedetail);
+	// console.log(tadetail);
 	res.send({ coursedetail, tadetail });
 	
 });
@@ -276,7 +323,7 @@ app.get("/result", async (req, res) => {
 	  await workbook.xlsx.writeFile('allotment.xlsx');
   
 	  console.log('Excel file generated successfully.');
-	  console.log(result);
+	//   console.log(result);
   
 	  res.send({ message: 'Excel file generated successfully.', result: result });
 	} catch (error) {
@@ -284,58 +331,7 @@ app.get("/result", async (req, res) => {
 	  res.status(500).send('Error generating Excel file');
 	}
   });
-// app.get("/result", async (req, res) => {
-// 	const prof = await PROF.find();
-// 	const ta = await TA.find();
-// 	// res.send(match)
-// 	result = allotment(prof, ta);
-// 	// console.log(prof);
-// 	// console.log(ta);
-// 	// const ExcelJS = require('exceljs');
 
-// 	const data = result;
-	
-// 	  // Create a new workbook
-// 	  const workbook = new ExcelJS.Workbook();
-// 	  const worksheet = workbook.addWorksheet('Sheet1');
-	
-// 	  // Set headers
-// 	  worksheet.getCell(1, 1).value = 'course Code';
-// 	  worksheet.getCell(1, 2).value = 'ExpertTa';
-	
-// 	  // Split the values and assign them to separate columns
-// 	  data.forEach((item, index) => {
-// 	    worksheet.getCell(index + 2, 1).value = item.courseCode;
-	
-// 	    const values = item.expertTa.split(',');
-	
-// 	    values.forEach((value, columnIndex) => {
-// 	      worksheet.getCell(index + 2, columnIndex + 2).value = value;
-// 	    });
-// 	  });
-	
-// 	  // Save the workbook
-// 	  workbook.xlsx.writeFile('allotment.xlsx')
-// 	    .then(() => {
-// 	      console.log('Excel file generated successfully.');
-// 	    })
-// 	    .catch((error) => {
-// 	      console.log('Error generating Excel file:', error);
-// 	    });
-
-
-// 	// const sheet = XLSX.utils.json_to_sheet(result);
-	
-// 	// const workbook = XLSX.utils.book_new();
-// 	// XLSX.utils.book_append_sheet(workbook, sheet, "Allotment");
-// 	// const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
-
-// 	// XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
-// 	// XLSX.writeFile(workbook, 'allotment.xlsx')
-// 	// res.end('<p><a download="file.zip" href="/hostedFile.zip">Download</a></p>\n');
-// 	// res.download("./public/assets/allotment.xlsx");
-	
-// });
 
 
 app.get("/download-file", async (req, res) => {
@@ -351,20 +347,7 @@ app.get("/download-file", async (req, res) => {
 	  const workbook = new ExcelJS.Workbook();
 	  const worksheet = workbook.addWorksheet('Sheet1');
   
-	  // Set headers
-	//   worksheet.getCell(1, 1).value = 'course Code';
-	//   worksheet.getCell(1, 2).value = 'ExpertTa';
-  
-	//   // Split the values and assign them to separate columns
-	//   data.forEach((item, index) => {
-	// 	worksheet.getCell(index + 2, 1).value = item.courseCode;
-  
-	// 	const values = item.expertTa.split(',');
-  
-	// 	values.forEach((value, columnIndex) => {
-	// 	  worksheet.getCell(index + 2, columnIndex + 2).value = value;
-	// 	});
-	//   });
+
 
 	worksheet.getCell(1, 1).value = 'course Code';
 	//   worksheet.getCell(1, 2).value = 'ExpertTa';
@@ -408,91 +391,63 @@ app.get("/download-file", async (req, res) => {
   });
   
 
-// app.get("/download-file", async (req, res) => {
-// 	const prof = await PROF.find();
-// 	const ta = await TA.find();
-// 	// res.send(match)
-// 	result = allotment(prof, ta);
 
-// 	const data = result;
-	
-// 	// Create a new workbook
-// 	const workbook = new ExcelJS.Workbook();
-// 	const worksheet = workbook.addWorksheet('Sheet1');
-  
-// 	// Set headers
-// 	worksheet.getCell(1, 1).value = 'course Code';
-// 	worksheet.getCell(1, 2).value = 'ExpertTa';
-  
-// 	// Split the values and assign them to separate columns
-// 	data.forEach((item, index) => {
-// 	  worksheet.getCell(index + 2, 1).value = item.courseCode;
-  
-// 	  const values = item.expertTa.split(',');
-  
-// 	  values.forEach((value, columnIndex) => {
-// 		worksheet.getCell(index + 2, columnIndex + 2).value = value;
-// 	  });
+// app.get("/api", async (req, res) => {
+// 	res.json({
+// 		hello: ["chris", "ben"],
 // 	});
+// });
 
-// 	// Save the workbook
-// 	workbook.xlsx.writeFile('allotment.xlsx')
-// 	  .then(() => {
-// 		console.log('Excel file generated successfully.');
-// 	  })
-// 	  .catch((error) => {
-// 		console.log('Error generating Excel file:', error);
-
-// 	  });
-	  
-// 	res.download("./allotment.xlsx");
-  
-
-	
-// 	// result2 = res.json(allotment(prof, ta));	
-// 	// const sheet = XLSX.utils.json_to_sheet(result);
-	
-// 	// const workbook = XLSX.utils.book_new();
-// 	// XLSX.utils.book_append_sheet(workbook, sheet, "Allotment");
-// 	// const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
-
-// 	// XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
-// 	// XLSX.writeFile(workbook, 'allotment.xlsx')
-// 	// res.download("./allotment.xlsx");
-// 	// res.download("allotment.xlsx");
-//   });
-
-// app.use('/downloads', express.static('downloads'));
-
-app.get("/api", async (req, res) => {
-	res.json({
-		hello: ["chris", "ben"],
-	});
-});
+// const bcrypt = require('bcrypt'); // Make sure to srequire bcrypt
 
 app.post("/deletecourse", async (req, res) => {
-	console.log(req.body);
-	// console.log("HIIIiiiii");
 	try {
 		const courseCode = req.body.id.toLowerCase();
-		console.log(courseCode);
-		await PROF.findOneAndDelete({ courseCode });
-		res.redirect('/')
+		const password = req.body.password;
+		const delProf = await PROF.findOne({ courseCode }); // Make sure to use await here
+		if (!delProf) {
+			// If the courseCode does not exist in the database
+			return res.status(404).send("Course not found");
+		}
+
+		const check = await bcrypt.compare(password, delProf.password);
+		if (check) {
+			await PROF.findOneAndDelete({ courseCode });
+			return res.redirect("/");
+		} else {
+			return res.render("deletecourse", { error: "Incorrect Password Entered or Course Code" });
+		}
 	} catch (e) {
-		console.log("catch");
-		res.send(501);
+		console.log(e); // Output the error to the console for debugging
+		res.status(500).send("Internal Server Error");
 	}
 });
 
 app.post("/deleteta", async (req, res) => {
 	// console.log("starting");
-	console.log(req.body);
+	// console.log(req.body);
 	try {
-	  const rollNumber = req.body.id.toLowerCase();
-	  console.log(rollNumber);
+	//   const rollNumber = req.body.id.toLowerCase();
+	  const rollNumber = req.body.id;
+	  const password = req.body.password;
+
+	  const delTa = await TA.findOne({ rollNumber }); // Make sure to use await here
+	  if (!delTa) {
+		// If the rollNumber does not exist in the database
+		return res.render("deleteta", { error: "Incorrect Password or Roll Number" });
+	  }
+
+	  const check = await bcrypt.compare(password, delTa.password);
+	  if (check) {
+		await TA.findOneAndDelete({ rollNumber });
+		return res.redirect("/");
+	  }else {
+		return res.render("deleteta", { error: "Incorrect Password or Roll Number" });
+	  }
+	//   console.log(rollNumber);
 	//   console.log("try")
-	  await TA.findOneAndDelete({ rollNumber });
-	  res.redirect('/');
+	//   await TA.findOneAndDelete({ rollNumber });
+	//   res.redirect('/');
 	} catch (error) {
 	  console.log(error);
 	  res.sendStatus(500); // Send 500 Internal Server Error status code
