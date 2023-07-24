@@ -36,7 +36,7 @@ cgpaInput.addEventListener("input", function () {
   const cgpaValue = parseFloat(cgpaInput.value);
 
   if (isNaN(cgpaValue)) {
-    cgpaError.textContent = "CGPA should be a valid number";
+    cgpaError.textContent = "Enter valid CGPA";
   } else if (cgpaValue < 8 || cgpaValue > 10) {
     cgpaError.textContent = "CGPA should be between 8 and 10 inclusive";
   } else {
