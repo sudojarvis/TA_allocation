@@ -1,9 +1,9 @@
+var passwordInput = document.getElementById("password");
+var showPasswordCheckbox = document.getElementById("showPassword");
+var showPasswordLabel = document.getElementById("showPasswordLabel");
+
 
 function togglePasswordVisibility() {
-    var passwordInput = document.getElementById("password");
-    var showPasswordCheckbox = document.getElementById("showPassword");
-    var showPasswordLabel = document.getElementById("showPasswordLabel");
-  
     if (showPasswordCheckbox.checked) {
       passwordInput.type = "text";
       showPasswordLabel.textContent = "Hide Password";
@@ -12,7 +12,10 @@ function togglePasswordVisibility() {
       showPasswordLabel.textContent = "Show Password";
     }
 
+    // passwordInput.type = "password";
+
 }
+
 
 const isUgStudentCheckbox = document.getElementById("isUgStudent");
 const cgpaInput = document.getElementById("cgpa");
@@ -82,6 +85,13 @@ function unchecked() {
     course_grad_pref_select_3.required = false;
 }
 
+function resetPassword() {
+    passwordInput.type = "password";
+    showPasswordCheckbox.checked = false;
+    showPasswordLabel.textContent = "Show Password";
+}
+
+
 
 function submitForm() {
     const rollNumber = document.querySelector("#rollNumber").value;
@@ -120,7 +130,7 @@ function submitForm() {
             if (data.error) {
                 console.error(data.error);
             } else {
-                togglePasswordVisibility();
+                // togglePasswordVisibility();
                 unchecked();
                 facultyForm.reset();
                 
@@ -164,6 +174,12 @@ facultyForm.addEventListener("submit", function (e) {
 
   submitForm();
   unchecked();
+  resetPassword();
+  // togglePasswordVisibility()
+  // passwordInput.type = "password";
+  // showPasswordCheckbox.checked = false;
+  // showPasswordLabel.textContent = "Show Password";
+  // facultyForm.reset();
   
 
 });
