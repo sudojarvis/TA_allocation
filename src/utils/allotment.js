@@ -29,7 +29,7 @@ function allotment(prof, ta) {
 
         const temp1 = temp.slice(i, j);
         temp1.sort((a, b) => {
-            const courseGradeOrder = ['f', 'e-', 'e', 'd-', 'd', 'c-', 'c', 'b-', 'b', 'a-', 'a'];
+            const courseGradeOrder = ['f', 'e-', 'e', 'd-', 'd', 'c-', 'c', 'b-', 'b', 'a-', 'a', 'a*'];
             return courseGradeOrder.indexOf(b.courseGrade) - courseGradeOrder.indexOf(a.courseGrade);
         });
 

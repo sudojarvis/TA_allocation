@@ -73,6 +73,7 @@ facultyForm.addEventListener("submit", async function (e) {
         });
 
         facultyForm.reset();
+        togglePasswordVisibility();
     } catch (err) {
         console.error('Error hashing password:', err);
     }
