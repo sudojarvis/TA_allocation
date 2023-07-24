@@ -321,7 +321,7 @@ function allotment(prof, ta) {
 
     // if no of tas required is still not zero then assign pg students first to the course if available 
 
-    if (noOftasRequired > 0 && professor.prefFilled===0) {
+    if (noOftasRequired > 0){ //&& professor.prefFilled===0) {
       var temp1= pgTas.filter(ta => ta.preferences[0].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
       var temp2= pgTas.filter(ta => ta.preferences[1].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
       var temp3= pgTas.filter(ta => ta.preferences[2].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
@@ -345,7 +345,7 @@ function allotment(prof, ta) {
       }
     }
           // if all pg students are over then assign ug students to the course
-    if (noOftasRequired > 0 && professor.prefFilled===0) {
+    if (noOftasRequired > 0) { // && professor.prefFilled===0) {
       var temp1 = ugTas.filter(ta => ta.preferences[0].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade));
       var temp2 = ugTas.filter(ta => ta.preferences[1].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade));
       var temp3 = ugTas.filter(ta => ta.preferences[2].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade));
