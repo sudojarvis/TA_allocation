@@ -55,6 +55,14 @@ function allotment(prof, ta) {
     if (p.taRollNumber3 == '' || p.taRollNumber3 == undefined) {
       count++;
     }
+
+    var taRequired = 0;
+
+    if (p.theoryLab === "theory") {
+      taRequired = Math.ceil(p.nof / 30);
+    } else {
+      taRequired = Math.ceil(p.nof / 15);
+    }
   
     return {
       courseCode: p.courseCode,
@@ -65,7 +73,8 @@ function allotment(prof, ta) {
       courseGrade: p.courseGrade,
       instructor: p.instructorName,
       courseName: p.courseName,
-      prefFilled: count
+      prefFilled: count,
+      noOftasRequired: taRequired,
     };
   });
 
@@ -83,7 +92,7 @@ function allotment(prof, ta) {
   })
   );
 
-  console.log(tas);    
+  // console.log(tas);    
  
 
   var presentYear = new Date().getFullYear();
@@ -157,8 +166,8 @@ function allotment(prof, ta) {
   
 
   professors.forEach(professor => {
-    const studentPerTA = professor.theoryLab === "theory" ? 30 : 15;  // 30 for theory and 15 for lab
-    var noOftasRequired = Math.ceil(professor.noOfStudents / studentPerTA);
+    // const studentPerTA = professor.theoryLab === "theory" ? 30 : 15;  // 30 for theory and 15 for lab
+    // var noOftasRequired = Math.ceil(professor.noOfStudents / studentPerTA);
 
     matching.push({
       courseCode: professor.courseCode,
@@ -202,9 +211,59 @@ function allotment(prof, ta) {
             if(!taAssigned[taPref[i].rollNumber]){
 
               matching.find(m => m.courseCode === professor.courseCode).expertTa.push(taPref[i].rollNumber);
-              noOftasRequired--;
+              // noOftasRequired--;
+              professor["noOftasRequired"]--;
+              // console.log(professor["noOftasRequired"]);
               taAssigned[taPref[i].rollNumber]=true;
               break;
+            }
+            else{
+              // var taCourseIndex = matching.findIndex(m => m.courseCode === professor.courseCode);
+              
+              var prevtaCourseIndex = matching.findIndex(m => m.expertTa.includes(taPref[i].rollNumber));
+
+              var prevCourseCode = matching[prevtaCourseIndex].courseCode;
+              
+
+              var currentTaWeight = taPref[i].preferences.find(pref => pref.courseCode === professor.courseCode).weight;
+              var prevtaWeight = taPref[i].preferences.find(pref => pref.courseCode === prevCourseCode).weight;
+              
+              if(currentTaWeight>prevtaWeight){
+                matching[prevtaCourseIndex].expertTa.splice(matching[prevtaCourseIndex].expertTa.indexOf(taPref[i].rollNumber),1);
+                matching.find(m => m.courseCode === professor.courseCode).expertTa.push(taPref[i].rollNumber);
+                // noOftasRequired--;
+                professor["noOftasRequired"]--;
+                // console.log("professor.noOftasRequired",professor.noOftasRequired);
+                var prevProf = professors.find(prof => prof.courseCode === prevCourseCode);
+                prevProf["noOftasRequired"]++;
+                taAssigned[taPref[i].rollNumber]=true;
+
+                function findReplacementTa(){
+                  var tempTa = pgTas.filter(ta => ta.rollNumber.slice(0, 3) === profTaRollNumber && !specificallyChosenByOtherProf(ta.rollNumber, professor.courseCode));
+                  var taPref1 = tempTa.filter(ta => ta.preferences[0].courseCode === prevCourseCode && matching.find(m => m.courseCode === prevCourseCode).expertTa.indexOf(ta.rollNumber) === -1);
+                  var taPref2 = tempTa.filter(ta => ta.preferences[1].courseCode === prevCourseCode && matching.find(m => m.courseCode === prevCourseCode).expertTa.indexOf(ta.rollNumber) === -1);
+                  var taPref3 = tempTa.filter(ta => ta.preferences[2].courseCode === professor.courseCode && matching.find(m => m.courseCode === prevCourseCode).expertTa.indexOf(ta.rollNumber) === -1);
+                  var taPref = [...taPref1, ...taPref2, ...taPref3];
+
+                  if(taPref.length===0){
+                    return;
+                  }
+
+                  for(let i=0;i<taPref.length;i++){
+                    if(!taAssigned[taPref[i].rollNumber]){
+                      matching.find(m => m.courseCode === prevCourseCode).expertTa.push(taPref[i].rollNumber);
+                      // noOftasRequired--;
+                      prevProf["noOftasRequired"]--;
+                      taAssigned[taPref[i].rollNumber]=true;
+                      break;
+                    }
+                  }
+                }
+
+                findReplacementTa();
+                
+              }
+          
             }
           }
 
@@ -215,11 +274,11 @@ function allotment(prof, ta) {
           // console.log("tempTa", tempTa);
 
           // console.log("tempTa", tempTa);
-          var taPref1 = tempTa.filter(ta => ta.preferences[0].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1 && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade)); // && !specifcallyChosenByOtherProf(ta.rollNumber, professor.courseCode));
+          var taPref1 = tempTa.filter(ta => ta.preferences[0].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1 && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade) && ta.cgpa!==null);
           // console.log("taPref1", taPref1);
-          var taPref2 = tempTa.filter(ta => ta.preferences[1].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1 && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade));// && !specifcallyChosenByOtherProf(ta.rollNumber, professor.courseCode));
+          var taPref2 = tempTa.filter(ta => ta.preferences[1].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1 && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade) && ta.cgpa!==null);
           // console.log("taPref2", taPref2);
-          var taPref3 = tempTa.filter(ta => ta.preferences[2].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1 && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade)); //&& !specifcallyChosenByOtherProf(ta.rollNumber, professor.courseCode));
+          var taPref3 = tempTa.filter(ta => ta.preferences[2].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1 && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade) && ta.cgpa!==null);
           // console.log("taPref3", taPref3);
           // var taPref = [...taPref1, ...taPref2, ...taPref3];
 
@@ -239,8 +298,8 @@ function allotment(prof, ta) {
             tempTA1.push({
               rollNumber:ta.rollNumber,
               cgpa:ta.cgpa,
-              courseCode:ta.preferences[0].courseCode,
-              courseGrade:ta.preferences[0].courseGrade
+              courseCode:ta.preferences[1].courseCode,
+              courseGrade:ta.preferences[1].courseGrade
             })
           }
 
@@ -248,8 +307,8 @@ function allotment(prof, ta) {
             tempTA2.push({
               rollNumber:ta.rollNumber,
               cgpa:ta.cgpa,
-              courseCode:ta.preferences[0].courseCode,
-              courseGrade:ta.preferences[0].courseGrade
+              courseCode:ta.preferences[2].courseCode,
+              courseGrade:ta.preferences[2].courseGrade
             })
           }
 
@@ -275,7 +334,8 @@ function allotment(prof, ta) {
           for(let i=0;i<taPref.length;i++){
             if(!taAssigned[taPref[i].rollNumber]){
               matching.find(m => m.courseCode === professor.courseCode).expertTa.push(taPref[i].rollNumber);
-              noOftasRequired--;
+              // noOftasRequired--;
+              professor["noOftasRequired"]--;
               taAssigned[taPref[i].rollNumber]=true;
               taAssignedBatchTag[taPref[i].rollNumber]=true;
               break;
@@ -304,7 +364,8 @@ function allotment(prof, ta) {
             if(!taAssigned[ta.rollNumber] && !x){
            
               matching.find(m => m.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
-              noOftasRequired--;
+              // noOftasRequired--;
+              professor["noOftasRequired"]--;
               taAssigned[ta.rollNumber]=true;
             }
   
@@ -313,7 +374,7 @@ function allotment(prof, ta) {
 
       }
 
-      if(noOftasRequired===0){
+      if(professor.noOftasRequired===0){
         break;
       }
       
@@ -321,7 +382,7 @@ function allotment(prof, ta) {
 
     // if no of tas required is still not zero then assign pg students first to the course if available 
 
-    if (noOftasRequired > 0){ //&& professor.prefFilled===0) {
+    if (professor.noOftasRequired > 0) { // && professor.prefFilled===0) {
       var temp1= pgTas.filter(ta => ta.preferences[0].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
       var temp2= pgTas.filter(ta => ta.preferences[1].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
       var temp3= pgTas.filter(ta => ta.preferences[2].courseCode === professor.courseCode && matching.find(m => m.courseCode === professor.courseCode).expertTa.indexOf(ta.rollNumber) === -1);
@@ -334,21 +395,70 @@ function allotment(prof, ta) {
           if(!taAssigned[ta.rollNumber] && !specificallyChosenByOtherProf(ta.rollNumber,professor.courseCode)){
 
             matching.find(m => m.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
-            noOftasRequired--;
+            // noOftasRequired--;
+            professor["noOftasRequired"]--;
             taAssigned[ta.rollNumber]=true;
           }
+          else{
+            
+            if(!specificallyChosenByOtherProf(ta.rollNumber,professor.courseCode)){
+              var prevtaCourseIndex = matching.findIndex(m => m.expertTa.includes(ta.rollNumber));
+              var prevCourseCode = matching[prevtaCourseIndex].courseCode;
+              var currentTaWeight = ta.preferences.find(pref => pref.courseCode === professor.courseCode).weight;
+              var prevtaWeight = ta.preferences.find(pref => pref.courseCode === prevCourseCode).weight;
+              
+              if(currentTaWeight>prevtaWeight){
+                matching[prevtaCourseIndex].expertTa.splice(matching[prevtaCourseIndex].expertTa.indexOf(ta.rollNumber),1);
+                matching.find(m => m.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
+                // noOftasRequired--;
+                professor["noOftasRequired"]--;
 
+                var prevProf = professors.find(prof => prof.courseCode === prevCourseCode);
+                prevProf["noOftasRequired"]++;
+
+                taAssigned[ta.rollNumber]=true;
+
+                function findReplacementTa(){
+                  var temp1= pgTas.filter(ta => ta.preferences[0].courseCode === prevCourseCode && matching.find(m => m.courseCode === prevCourseCode).expertTa.indexOf(ta.rollNumber) === -1);
+                  var temp2= pgTas.filter(ta => ta.preferences[1].courseCode === prevCourseCode && matching.find(m => m.courseCode === prevCourseCode).expertTa.indexOf(ta.rollNumber) === -1);
+                  var temp3= pgTas.filter(ta => ta.preferences[2].courseCode === prevCourseCode && matching.find(m => m.courseCode === prevCourseCode).expertTa.indexOf(ta.rollNumber) === -1);
+                  var temp = [...temp1, ...temp2, ...temp3];
+                  if(temp.length===0){
+                    return;
+                  }
+                  // console.log("temp",temp);
+                  for (var ta of temp) {
+                    if (!matching.find(m => m.courseCode === prevCourseCode).expertTa.includes(ta.rollNumber)) {
+                      if(!taAssigned[ta.rollNumber]){
+                        matching.find(m => m.courseCode === prevCourseCode).expertTa.push(ta.rollNumber);
+                        // noOftasRequired--;
+                        prevProf["noOftasRequired"]--;
+                        taAssigned[ta.rollNumber]=true;
+                      }
+                    }
+                    if(prevProf.noOftasRequired===0){
+                      break;
+                    }
+                  }
+                }
+                
+                findReplacementTa();
+
+
+              }
+            }
+          }
         }
-        if(noOftasRequired===0){
+        if(professor.noOftasRequired===0){
           break;
         }
       }
     }
           // if all pg students are over then assign ug students to the course
-    if (noOftasRequired > 0) { // && professor.prefFilled===0) {
-      var temp1 = ugTas.filter(ta => ta.preferences[0].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade));
-      var temp2 = ugTas.filter(ta => ta.preferences[1].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade));
-      var temp3 = ugTas.filter(ta => ta.preferences[2].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade));
+    if (professor.noOftasRequired > 0) { // && professor.prefFilled===0) {
+      var temp1 = ugTas.filter(ta => ta.preferences[0].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[0].courseGrade, professor.courseGrade) && ta.cgpa!==null);
+      var temp2 = ugTas.filter(ta => ta.preferences[1].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[1].courseGrade, professor.courseGrade) && ta.cgpa!==null);
+      var temp3 = ugTas.filter(ta => ta.preferences[2].courseCode === professor.courseCode && checkCourseGrade(ta.preferences[2].courseGrade, professor.courseGrade) && ta.cgpa!==null);
 
       const tempTA0=[];
       const tempTA1=[];
@@ -396,11 +506,12 @@ function allotment(prof, ta) {
           if(!taAssigned[ta.rollNumber]){
 
             matching.find(m => m.courseCode === professor.courseCode).expertTa.push(ta.rollNumber);
-            noOftasRequired--;
+            // noOftasRequired--;
+            professor["noOftasRequired"]--;
             taAssigned[ta.rollNumber]=true;
           }
         }
-        if (noOftasRequired === 0) {
+        if (professor.noOftasRequired === 0) {
           break;
         }
       }
@@ -438,107 +549,475 @@ module.exports = allotment;
 
 // const profs = [{
 //   "_id": {
-//     "$oid": "64bcdc4ca9e301deb420b165"
+//     "$oid": "64bece1d9e6ddbd2c6382635"
 //   },
-//   "courseCode": "eel1010",
-//   "courseName": "dasds",
-//   "instructorName": "sdffd",
-//   "ugPg": "ug",
-//   "electiveCore": "elective",
-//   "needToAttend": 0,
-//   "nof": 234,
-//   "theoryLab": "theory",
-//   "courseGrade": "a",
-//   "taRollNumber1": "p20ee002",
-//   "taRollNumber2": "p20ee001",
-//   "taRollNumber3": "p20ee005",
-//   "password": "$2a$08$PA1LkPuo84xXj1fohpoDlufhftqv7rqsFaYToWKNzz.Q3INhp5PFm",
-//   "__v": 0
-// },
-// {
-//   "_id": {
-//     "$oid": "64bcdc99a9e301deb420b168"
-//   },
-//   "courseCode": "eel2020",
-//   "courseName": "sdads",
-//   "instructorName": "vcnxb",
-//   "ugPg": "ug",
-//   "electiveCore": "core",
-//   "needToAttend": 0,
-//   "nof": 38,
-//   "theoryLab": "theory",
-//   "courseGrade": "a",
-//   "taRollNumber1": "p20ee001",
-//   "taRollNumber2": "p20ee002",
-//   "taRollNumber3": "p20ee003",
-//   "password": "$2a$08$DBDYWxeSNufFuJmNva9Cpesm4swYTN9SjqgZ944iIdh631IJ2soMa",
-//   "__v": 0
-// },
-// {
-//   "_id": {
-//     "$oid": "64bcdcdda9e301deb420b16b"
-//   },
-//   "courseCode": "eel3030",
-//   "courseName": "sdfs",
-//   "instructorName": "nht",
+//   "courseCode": "eel2030",
+//   "courseName": "circuit theory",
+//   "instructorName": "sandeep kumar yadav",
 //   "ugPg": "ug",
 //   "electiveCore": "elective",
 //   "needToAttend": 1,
-//   "nof": 232,
+//   "nof": 84,
 //   "theoryLab": "theory",
 //   "courseGrade": "a-",
-//   "taRollNumber1": "p20ee003",
-//   "taRollNumber2": "p20ee004",
-//   "taRollNumber3": "p20ee001",
-//   "password": "$2a$08$gqmKjqmefLXzxGFg4vIv1.dE8RY.J75IHUAP7M00MPKep.OIJFjI.",
+//   "taRollNumber1": "p19ee207",
+//   "taRollNumber2": "",
+//   "taRollNumber3": "",
+//   "password": "$2a$08$Gla9gPELSz6Pjxi6Cu4jmew6GyV2lSJi3qpBPMqdGJfNfhIc9ptBu",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed1569e6ddbd2c6382660"
+//   },
+//   "courseCode": "shl7430",
+//   "courseName": "mems technology for biomedical applications",
+//   "instructorName": "kamaljit rangra",
+//   "ugPg": "ug",
+//   "electiveCore": "core",
+//   "needToAttend": 0,
+//   "nof": 7,
+//   "theoryLab": "theory",
+//   "courseGrade": "a-",
+//   "taRollNumber1": "",
+//   "taRollNumber2": "",
+//   "taRollNumber3": "",
+//   "password": "$2a$08$qSLehy2/o07hnbor34MHM.PbxYUJIA7.1wHbJbt/1xzFRfpbf5HY2",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed2cb9e6ddbd2c638266c"
+//   },
+//   "courseCode": "eel3080",
+//   "courseName": "data communication networks",
+//   "instructorName": "arun kumar singh",
+//   "ugPg": "pg",
+//   "electiveCore": "core",
+//   "needToAttend": 0,
+//   "nof": 87,
+//   "theoryLab": "theory",
+//   "courseGrade": "a-",
+//   "taRollNumber1": "p19ee201",
+//   "taRollNumber2": "p19ee015",
+//   "taRollNumber3": "",
+//   "password": "$2a$08$ocGr2hS2Wk7UU7hcBB/1JuOaEWhNgIMAZlZDdSGwOwE1Uf0P/JCYW",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed7b7213676164c71a916"
+//   },
+//   "courseCode": "eel2010",
+//   "courseName": "signals and systems",
+//   "instructorName": "rajendra nagar",
+//   "ugPg": "ug",
+//   "electiveCore": "core",
+//   "needToAttend": 0,
+//   "nof": 187,
+//   "theoryLab": "theory",
+//   "courseGrade": "a-",
+//   "taRollNumber1": "p19ee013",
+//   "taRollNumber2": "m22ee107",
+//   "taRollNumber3": "",
+//   "password": "$2a$08$N57oQ/79EPfsAYQIGBMJg.c9gtCx1ml3Dn.GZ79.3jn0t5R50dKt2",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed864213676164c71a91d"
+//   },
+//   "courseCode": "eel2020",
+//   "courseName": "digital design",
+//   "instructorName": "nitin bhatia",
+//   "ugPg": "ug",
+//   "electiveCore": "core",
+//   "needToAttend": 0,
+//   "nof": 178,
+//   "theoryLab": "theory",
+//   "courseGrade": "a-",
+//   "taRollNumber1": "p19",
+//   "taRollNumber2": "p20",
+//   "taRollNumber3": "p18",
+//   "password": "$2a$08$k0ySEnB/x4OMIGSiYZg8MONNkbBk/Pg6NrSov0IJNMOVkEXUH6/6K",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bedde6213676164c71a957"
+//   },
+//   "courseCode": "eel2050",
+//   "courseName": "physical electronics",
+//   "instructorName": "harshit agarwal",
+//   "ugPg": "ug",
+//   "electiveCore": "core",
+//   "needToAttend": 0,
+//   "nof": 82,
+//   "theoryLab": "theory",
+//   "courseGrade": "a-",
+//   "taRollNumber1": "p20",
+//   "taRollNumber2": "p22",
+//   "taRollNumber3": "",
+//   "password": "$2a$08$s2rYPQ2nf7i.P61blr/eA.jYi8jI1tsoZWPA4hHytApHEhJxVXjwG",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bf51e811a87dba93a329a0"
+//   },
+//   "courseCode": "eel2040",
+//   "courseName": "engineering electromagnetics",
+//   "instructorName": "soumava mukherjee",
+//   "ugPg": "ug",
+//   "electiveCore": "elective",
+//   "needToAttend": 0,
+//   "nof": 120,
+//   "theoryLab": "theory",
+//   "courseGrade": "a",
+//   "taRollNumber1": "p20",
+//   "taRollNumber2": "p20",
+//   "taRollNumber3": "p20",
+//   "password": "$2a$08$oqn/NA4nlgWn4VFe8RA6weUctOwN1bRaAo8oPPCxs36YZK8/PKO0m",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bf52da11a87dba93a329a5"
+//   },
+//   "courseCode": "eel3090",
+//   "courseName": "embedded systems",
+//   "instructorName": "binod kumar",
+//   "ugPg": "ug",
+//   "electiveCore": "core",
+//   "needToAttend": 0,
+//   "nof": 177,
+//   "theoryLab": "theory",
+//   "courseGrade": "a-",
+//   "taRollNumber1": "p20",
+//   "taRollNumber2": "p20",
+//   "taRollNumber3": "p20",
+//   "password": "$2a$08$Z7t0nZ/crCD2nA6UyIsEt.PMUfy8czry96Q8ZTjTRfyBHekDJejfW",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bf575911a87dba93a329c0"
+//   },
+//   "courseCode": "eel4040",
+//   "courseName": "data engineering",
+//   "instructorName": "xyz",
+//   "ugPg": "ug",
+//   "electiveCore": "core",
+//   "needToAttend": 0,
+//   "nof": 145,
+//   "theoryLab": "lab",
+//   "courseGrade": "a-",
+//   "taRollNumber1": "p20",
+//   "taRollNumber2": "p20",
+//   "taRollNumber3": "p20",
+//   "password": "$2a$08$jZUNdzkCCEslUMI2bT9HMu73car6HBG7cgsgcADw/OFEcVf3MBvyG",
 //   "__v": 0
 // }]
 
 
-
 // const tas = [{
 //   "_id": {
-//     "$oid": "64bcdaa4a9e301deb420b15c"
+//     "$oid": "64bece969e6ddbd2c6382638"
 //   },
-//   "rollNumber": "p20ee011",
-//   "cgpa": 9,
-//   "pref1": "eel1010",
-//   "course_grade_pref_1": "a-",
-//   "pref2": "eel2020",
-//   "course_grade_pref_2": "a-",
-//   "pref3": "eel3030",
-//   "course_grade_pref_3": "b-",
-//   "password": "$2a$08$qZBba4s788O39DAQpE7sdeAld.ZMBUbxHXA2xtW9XsLx8YkSrdSxC",
+//   "rollNumber": "p19ee207",
+//   "cgpa": null,
+//   "pref1": "eel2030",
+//   "course_grade_pref_1": "",
+//   "pref2": "phl2040",
+//   "course_grade_pref_2": "",
+//   "pref3": "eel2010",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$NgC5Mv2zwq1K1FuRsuopW.XF4CTvAin2yWiZH9tiZoHFfQiN3bBjS",
 //   "__v": 0
 // },
 // {
 //   "_id": {
-//     "$oid": "64bcdb77a9e301deb420b15f"
+//     "$oid": "64beceec9e6ddbd2c638263d"
+//   },
+//   "rollNumber": "p19ee013",
+//   "cgpa": null,
+//   "pref1": "eel2010",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel2020",
+//   "course_grade_pref_2": "",
+//   "pref3": "eel2030",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$7W9.sjWHWA8HhOLb/AfuWOqhvKslJ02WKOfK3JPCKuwr5HHVB2UsS",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64becf6a9e6ddbd2c6382640"
+//   },
+//   "rollNumber": "m22ee107",
+//   "cgpa": null,
+//   "pref1": "eel2010",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel3060",
+//   "course_grade_pref_2": "",
+//   "pref3": "shl7430",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$W2wppwlNTrrBo6Y9ll2CYu/d59qmSULFLadKIYKjObgxrwuu44mXe",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed0139e6ddbd2c6382643"
+//   },
+//   "rollNumber": "m22ee064",
+//   "cgpa": null,
+//   "pref1": "eel2010",
+//   "course_grade_pref_1": "",
+//   "pref2": "phl4050",
+//   "course_grade_pref_2": "",
+//   "pref3": "rml6020",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$VZOWX9yUKSkRwzdqQZ.gmOJc0mL/C/pAeQqu9Kl.2OqDA6eIJvXiK",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed04a9e6ddbd2c6382646"
+//   },
+//   "rollNumber": "p20ee203",
+//   "cgpa": null,
+//   "pref1": "eel2010",
+//   "course_grade_pref_1": "",
+//   "pref2": "eep2040",
+//   "course_grade_pref_2": "",
+//   "pref3": "eek5020",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$Rr7AYIFx5uo2EYnqgZrzcOexZ7syaCLFZrty0QmLSmExbX/xOFPMO",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed0d29e6ddbd2c6382651"
+//   },
+//   "rollNumber": "p19ee012",
+//   "cgpa": null,
+//   "pref1": "eel2030",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel7130",
+//   "course_grade_pref_2": "",
+//   "pref3": "rml6020",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$9tipy42T62d6Rvrn7z7tmORq/er/.BYO8wUR3Qs7E8Zf8GHZDVmxu",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed1909e6ddbd2c6382663"
+//   },
+//   "rollNumber": "p19ee010",
+//   "cgpa": null,
+//   "pref1": "shl7430",
+//   "course_grade_pref_1": "",
+//   "pref2": "csl7650",
+//   "course_grade_pref_2": "",
+//   "pref3": "eel7500",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$o0Qo/EUbmK/GQfp18AwDKu0Jv4j8IiC2pHQLIONs/zA/0D8Rw8nfu",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed3049e6ddbd2c638266f"
+//   },
+//   "rollNumber": "p19ee015",
+//   "cgpa": null,
+//   "pref1": "eel3080",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel2010",
+//   "course_grade_pref_2": "",
+//   "pref3": "eel3070",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$FhkWNosOfGvdFMTihnUCZeRoFuSX8PTiXrG.VEzhUCNJphoATSs66",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed3cb9e6ddbd2c6382674"
+//   },
+//   "rollNumber": "p19ee003",
+//   "cgpa": null,
+//   "pref1": "eel3080",
+//   "course_grade_pref_1": "",
+//   "pref2": "phl2040",
+//   "course_grade_pref_2": "",
+//   "pref3": "ppl4050",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$9.jsBjzWHrjvbDihsjuzi.Ri5bwR7Fjp1mPV8NrhCFv2AiKAmSsQ2",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed4899e6ddbd2c638267b"
+//   },
+//   "rollNumber": "p19ee201",
+//   "cgpa": null,
+//   "pref1": "eel3080",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel2060",
+//   "course_grade_pref_2": "",
+//   "pref3": "phl2010",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$Ih4ertRRyMYiv5fxkUHpuutGJFDxcFfxAvHNtH16vmzi8Ka3i4o9u",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed5b19e6ddbd2c6382683"
+//   },
+//   "rollNumber": "p18ee203",
+//   "cgpa": null,
+//   "pref1": "eel2020",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel7220",
+//   "course_grade_pref_2": "",
+//   "pref3": "php2010",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$Yf2ilNLZTgUFoYFW91j4KOLhlBgKzx7QruOLeDR86pct.IgdZ2oeC",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bed727213676164c71a90f"
+//   },
+//   "rollNumber": "p20ee205",
+//   "cgpa": null,
+//   "pref1": "eel2010",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel7220",
+//   "course_grade_pref_2": "",
+//   "pref3": "phl2010",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$WwPRfzTNlDc3N2Akgzx29OcpUZB9eeWoobR0DIWE3p6OzfCPPIoHO",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64beda30213676164c71a934"
+//   },
+//   "rollNumber": "p20ee014",
+//   "cgpa": null,
+//   "pref1": "eel2020",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel7220",
+//   "course_grade_pref_2": "",
+//   "pref3": "phl2010",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$tMSYnLEKeK1g19yUvyzocuP7fDdkwLTC8qIF4foCVUc4.Ot7mrBOW",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64beda82213676164c71a93d"
+//   },
+//   "rollNumber": "p19ee205",
+//   "cgpa": null,
+//   "pref1": "eel2020",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel7220",
+//   "course_grade_pref_2": "",
+//   "pref3": "php2010",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$QYAe5CIj8OskRw7cQ7qtSO1RvXw5Ia5oyo.1yrKFWtLxwkmkfE6Ny",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bedc9f213676164c71a945"
+//   },
+//   "rollNumber": "p19ee006",
+//   "cgpa": null,
+//   "pref1": "eel2040",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel7220",
+//   "course_grade_pref_2": "",
+//   "pref3": "php2010",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$WjM/cvojGmG/YaN7DDJLrO6u9l1sha6g/z.zuiTQSg.Qf5bi09XZW",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bedd08213676164c71a94a"
+//   },
+//   "rollNumber": "m22ee105",
+//   "cgpa": null,
+//   "pref1": "eel2040",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel2020",
+//   "course_grade_pref_2": "",
+//   "pref3": "php2010",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$OunWobDnETk1IBySCdU0vOuNYwdpFLozwfAHvu2ALUFsDBosmflKe",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bede48213676164c71a95a"
+//   },
+//   "rollNumber": "p20ee018",
+//   "cgpa": null,
+//   "pref1": "eel2050",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel3060",
+//   "course_grade_pref_2": "",
+//   "pref3": "eel7150",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$72PLa6UW3UzqQ8BuEtcFPuBlJcVbuY/OFo9ODHi1kSJYxA.jt8ECC",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bedec8213676164c71a964"
+//   },
+//   "rollNumber": "p22ee007",
+//   "cgpa": null,
+//   "pref1": "eel2050",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel7220",
+//   "course_grade_pref_2": "",
+//   "pref3": "phl2010",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$bCgB1beCfV3TDCIxdkVqA.Rm.IjbybP5RQrndeqhpPYzbaQdB9WPq",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bf556f11a87dba93a329b0"
+//   },
+//   "rollNumber": "p20ee001",
+//   "cgpa": null,
+//   "pref1": "eel4040",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel3090",
+//   "course_grade_pref_2": "",
+//   "pref3": "eel5060",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$.vPbxj8b9ZEiNBSplYJExOxoNQ8DNv7UGmAdnhyr4HHNKfQ9blsZq",
+//   "__v": 0
+// },
+// {
+//   "_id": {
+//     "$oid": "64bf55c711a87dba93a329b5"
 //   },
 //   "rollNumber": "p20ee002",
-//   "cgpa": 9,
-//   "pref1": "eel2020",
-//   "course_grade_pref_1": "a",
-//   "pref2": "eel1010",
-//   "course_grade_pref_2": "a-",
-//   "pref3": "eel3030",
-//   "course_grade_pref_3": "a-",
-//   "password": "$2a$08$O/DWxT3wAtxjpaFeTldjSeWqBpKHP670RuqLSH7U8L.GwePAgOOtq",
-//   "__v": 0
-// },
-// {
-//   "_id": {
-//     "$oid": "64bcdbdba9e301deb420b162"
-//   },
-//   "rollNumber": "p20ee003",
-//   "cgpa": 9,
-//   "pref1": "eel3030",
-//   "course_grade_pref_1": "a-",
-//   "pref2": "eel1010",
-//   "course_grade_pref_2": "a-",
-//   "pref3": "eel1010",
-//   "course_grade_pref_3": "a-",
-//   "password": "$2a$08$VPqONRHPrsYRTiVe/pZ9tuOvnb7Ob1vGw6mREKmsAxlk3g7Nd2GRO",
+//   "cgpa": null,
+//   "pref1": "eel4040",
+//   "course_grade_pref_1": "",
+//   "pref2": "eel2020",
+//   "course_grade_pref_2": "",
+//   "pref3": "eel3090",
+//   "course_grade_pref_3": "",
+//   "password": "$2a$08$CjtxHbL4PAOIrB8bsnC2m.vjjDD8a3i5FAKWcujq/Vbrb0OdXfgS.",
 //   "__v": 0
 // }]
 
