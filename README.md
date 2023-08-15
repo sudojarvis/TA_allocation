@@ -1,5 +1,9 @@
 # TA_allocation
 
+```bash
+git clone https://github.com/sudojarvis/TA_allocation.git
+```
+
 ### installation requirements
 
 ```bash
@@ -13,5 +17,5 @@ npm install bcryptjs
 
 cd src
 node index.js
-
 ```
+go to: http://localhost:3000/
